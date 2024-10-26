@@ -2,11 +2,14 @@ package com.st.project_manager.Entity;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-import audit.Audit;
+import com.st.project_manager.audit.Audit;
+
 import constant.TaskStatus;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,8 +28,16 @@ public class Task extends Audit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(name = "start_date", updatable = false, nullable = false)
+    private LocalDateTime startDate;
+	
+	@Column(name = "end_date", updatable = false, nullable = false)
+    private LocalDateTime endDate;
 
+	@Column(unique = true)
 	private String title;
+	
 	private String description;
 	
 	@Enumerated(EnumType.STRING)

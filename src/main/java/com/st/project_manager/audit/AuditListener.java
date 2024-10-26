@@ -1,4 +1,4 @@
-package audit;
+package com.st.project_manager.audit;
 
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;

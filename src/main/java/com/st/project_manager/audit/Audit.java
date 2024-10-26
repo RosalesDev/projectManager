@@ -1,4 +1,4 @@
-package audit;
+package com.st.project_manager.audit;
 
 
 import org.hibernate.annotations.CreationTimestamp;

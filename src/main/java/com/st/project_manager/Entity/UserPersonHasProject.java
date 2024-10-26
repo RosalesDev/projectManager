@@ -1,6 +1,7 @@
 package com.st.project_manager.Entity;
 
-import audit.Audit;
+import com.st.project_manager.audit.Audit;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

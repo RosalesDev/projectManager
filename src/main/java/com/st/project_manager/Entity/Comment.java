@@ -1,6 +1,7 @@
 package com.st.project_manager.Entity;
 
-import audit.Audit;
+import com.st.project_manager.audit.Audit;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,5 +26,9 @@ public class Comment extends Audit {
  @ManyToOne
  @JoinColumn(name = "task_id")
  private Task task;
+ 
+ @ManyToOne
+ @JoinColumn(name = "step_id")
+ private Step step;
 }
 
