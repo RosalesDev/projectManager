@@ -1,12 +1,12 @@
 spring:
   datasource:
     url: jdbc:sqlserver://localhost:1433;databaseName=PROJECT_MANAGER_1;encrypt=false
-    username: api_user
+    username: sa
     password: Test1234
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.SQLServerDialect

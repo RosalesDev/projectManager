@@ -1,7 +1,5 @@
 package com.st.project_manager.Entity;
 
-import lombok.Data;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,12 +20,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
-@Data
 public class Task extends Audit {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 	
 	@Column(name = "start_date", updatable = false, nullable = false)
     private LocalDateTime startDate;
@@ -35,7 +32,7 @@ public class Task extends Audit {
 	@Column(name = "end_date", updatable = false, nullable = false)
     private LocalDateTime endDate;
 
-	@Column(unique = true)
+	@Column(unique = true, nullable = false)
 	private String title;
 	
 	private String description;
@@ -47,13 +44,95 @@ public class Task extends Audit {
 	@JoinColumn(name = "project_id")
 	private Project project;
 
-	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Step> steps;
 
-	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Comment> comments;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "assigned_to")
 	private UserPerson userPerson;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public LocalDateTime getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(LocalDateTime startDate) {
+		this.startDate = startDate;
+	}
+
+	public LocalDateTime getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDateTime endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public TaskStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TaskStatus status) {
+		this.status = status;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
+	public List<Step> getSteps() {
+		return steps;
+	}
+
+	public void setSteps(List<Step> steps) {
+		this.steps = steps;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public UserPerson getUserPerson() {
+		return userPerson;
+	}
+
+	public void setUserPerson(UserPerson userPerson) {
+		this.userPerson = userPerson;
+	}
+
+	
 }

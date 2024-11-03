@@ -1,19 +1,10 @@
 package com.st.project_manager.Dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import com.st.project_manager.Entity.Comment;
-import com.st.project_manager.Entity.Project;
-import com.st.project_manager.Entity.Step;
-import com.st.project_manager.Entity.UserPerson;
-
-import lombok.Data;
-
-@Data
 public class TaskDTO extends AuditDTO{
 
-	private Long id;
+	private Integer id;
 	
     private LocalDateTime startDate;
 	
@@ -25,8 +16,72 @@ public class TaskDTO extends AuditDTO{
 	
     private String status;
 
-	private Long projectId;
+	private Integer projectId;
 	
-	private Long assignedTo;
+	private Integer assignedTo;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public LocalDateTime getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(LocalDateTime startDate) {
+		this.startDate = startDate;
+	}
+
+	public LocalDateTime getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDateTime endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Integer getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(Integer projectId) {
+		this.projectId = projectId;
+	}
+
+	public Integer getAssignedTo() {
+		return assignedTo;
+	}
+
+	public void setAssignedTo(Integer assignedTo) {
+		this.assignedTo = assignedTo;
+	}
 	
 }

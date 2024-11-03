@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @EntityListeners(AuditListener.class)
-
 public abstract class Audit {
 
     @CreationTimestamp

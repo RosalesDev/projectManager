@@ -13,14 +13,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
 
 @Entity
-@Data
 public class Step extends Audit {
  @Id
  @GeneratedValue(strategy = GenerationType.IDENTITY)
- private Long id;
+ private Integer id;
 
  @Column(unique = true)
  private String description;
@@ -33,6 +31,48 @@ public class Step extends Audit {
  
  @Enumerated(EnumType.STRING)
  private StepStatus status;
+
+public Integer getId() {
+	return id;
+}
+
+public void setId(Integer id) {
+	this.id = id;
+}
+
+public String getDescription() {
+	return description;
+}
+
+public void setDescription(String description) {
+	this.description = description;
+}
+
+public boolean isFinalized() {
+	return isFinalized;
+}
+
+public void setFinalized(boolean isFinalized) {
+	this.isFinalized = isFinalized;
+}
+
+public Task getTask() {
+	return task;
+}
+
+public void setTask(Task task) {
+	this.task = task;
+}
+
+public StepStatus getStatus() {
+	return status;
+}
+
+public void setStatus(StepStatus status) {
+	this.status = status;
+}
+ 
+ 
  
 }
 

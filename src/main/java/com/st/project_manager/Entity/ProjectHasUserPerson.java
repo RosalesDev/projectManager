@@ -9,15 +9,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
 
 @Entity
-@Data
-public class UserPersonHasProject extends Audit{
+public class ProjectHasUserPerson extends Audit{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_person_id")
@@ -28,6 +26,38 @@ public class UserPersonHasProject extends Audit{
     private Project project;
 	
 	private String status;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public UserPerson getUserPerson() {
+		return userPerson;
+	}
+
+	public void setUserPerson(UserPerson userPerson) {
+		this.userPerson = userPerson;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	
 	
 

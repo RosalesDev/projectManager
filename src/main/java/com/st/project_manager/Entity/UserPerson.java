@@ -1,6 +1,8 @@
 package com.st.project_manager.Entity;
 
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+//import java.util.Set;
 
 import com.st.project_manager.audit.Audit;
 
@@ -9,34 +11,35 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import lombok.Data;
-import lombok.Getter;
+//import jakarta.persistence.OneToMany;
 
 @Entity
-@Data
 public class UserPerson extends Audit {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
+	private Integer id;
+
 	@Column(unique = true)
 	private String userName;
 	private String firstName;
 	private String lastName;
-	private String email;
-	private String password;
-	private String status;
-	
-	@OneToMany(mappedBy = "userPerson")
-	private Set<UserPersonHasProject> projectList;
 
-	public Long getId() {
+	@Column(unique = true)
+	private String email;
+	@JsonIgnore
+	private String password;
+	@Column(columnDefinition = "VARCHAR(20)")
+	private String status;
+	//
+	// @OneToMany(mappedBy = "userPerson")
+	// private Set<ProjectHasUserPerson> projectList;
+
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -88,11 +91,11 @@ public class UserPerson extends Audit {
 		this.status = status;
 	}
 
-	public Set<UserPersonHasProject> getProjectList() {
-		return projectList;
-	}
-
-	public void setProjectList(Set<UserPersonHasProject> projectList) {
-		this.projectList = projectList;
-	}
+	// public Set<ProjectHasUserPerson> getProjectList() {
+	// return projectList;
+	// }
+	//
+	// public void setProjectList(Set<ProjectHasUserPerson> projectList) {
+	// this.projectList = projectList;
+	// }
 }
