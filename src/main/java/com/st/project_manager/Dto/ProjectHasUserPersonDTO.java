@@ -1,13 +1,13 @@
-package com.st.project_manager.Dto;
+package com.st.project_manager.dto;
 
 public class ProjectHasUserPersonDTO extends AuditDTO {
 
 	private Integer id;
-	
-    private Integer userPersonId;
-	
-    private Integer projectId;
-	
+
+	private Integer userPersonId;
+
+	private Integer projectId;
+
 	private String status;
 
 	public Integer getId() {
@@ -41,5 +41,5 @@ public class ProjectHasUserPersonDTO extends AuditDTO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
 }

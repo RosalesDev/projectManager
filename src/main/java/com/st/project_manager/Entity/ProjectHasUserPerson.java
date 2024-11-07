@@ -1,4 +1,4 @@
-package com.st.project_manager.Entity;
+package com.st.project_manager.entity;
 
 import com.st.project_manager.audit.Audit;
 
@@ -11,20 +11,20 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class ProjectHasUserPerson extends Audit{
-	
+public class ProjectHasUserPerson extends Audit {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_person_id")
-    private UserPerson userPerson;
-	
+	@JoinColumn(name = "user_person_id")
+	private UserPerson userPerson;
+
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
-    private Project project;
-	
+	@JoinColumn(name = "project_id")
+	private Project project;
+
 	private String status;
 
 	public Integer getId() {
@@ -58,7 +58,5 @@ public class ProjectHasUserPerson extends Audit{
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
-	
 
 }

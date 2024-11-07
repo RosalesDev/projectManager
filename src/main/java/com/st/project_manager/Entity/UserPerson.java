@@ -1,17 +1,16 @@
-package com.st.project_manager.Entity;
+package com.st.project_manager.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-//import java.util.Set;
-
 import com.st.project_manager.audit.Audit;
 
+import constant.UserStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-//import jakarta.persistence.OneToMany;
 
 @Entity
 public class UserPerson extends Audit {
@@ -29,11 +28,9 @@ public class UserPerson extends Audit {
 	private String email;
 	@JsonIgnore
 	private String password;
-	@Column(columnDefinition = "VARCHAR(20)")
-	private String status;
-	//
-	// @OneToMany(mappedBy = "userPerson")
-	// private Set<ProjectHasUserPerson> projectList;
+	@Column(columnDefinition = "VARCHAR(20)", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private UserStatus status;
 
 	public Integer getId() {
 		return id;
@@ -83,19 +80,12 @@ public class UserPerson extends Audit {
 		this.password = password;
 	}
 
-	public String getStatus() {
+	public UserStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(UserStatus status) {
 		this.status = status;
 	}
 
-	// public Set<ProjectHasUserPerson> getProjectList() {
-	// return projectList;
-	// }
-	//
-	// public void setProjectList(Set<ProjectHasUserPerson> projectList) {
-	// this.projectList = projectList;
-	// }
 }

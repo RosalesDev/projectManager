@@ -1,16 +1,16 @@
-package com.st.project_manager.Dto;
+package com.st.project_manager.dto;
 
 public class StepDTO extends AuditDTO {
 
 	private Integer id;
 
-	 private String description;
-	 
-	 private boolean isFinalized;
+	private String description;
 
-	 private Integer taskId;
-	 
-	 private String status;
+	private boolean isFinalized;
+
+	private Integer taskId;
+
+	private String status;
 
 	public Integer getId() {
 		return id;
@@ -51,6 +51,5 @@ public class StepDTO extends AuditDTO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	 
-	 
+
 }

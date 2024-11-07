@@ -3,7 +3,7 @@ package com.st.project_manager.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.st.project_manager.Dto.UserPersonDTO;
+import com.st.project_manager.dto.UserPersonDTO;
 
 public interface UserPersonService {
 
@@ -15,6 +15,6 @@ public interface UserPersonService {
 
     UserPersonDTO updateUserPerson(Integer id, UserPersonDTO userPerson);
 
-    void deleteUserPerson(Integer id);
+    Optional<UserPersonDTO> deleteUserPerson(Integer id);
 
 }

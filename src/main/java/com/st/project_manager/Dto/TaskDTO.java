@@ -1,23 +1,23 @@
-package com.st.project_manager.Dto;
+package com.st.project_manager.dto;
 
 import java.time.LocalDateTime;
 
-public class TaskDTO extends AuditDTO{
+public class TaskDTO extends AuditDTO {
 
 	private Integer id;
-	
-    private LocalDateTime startDate;
-	
-    private LocalDateTime endDate;
+
+	private LocalDateTime startDate;
+
+	private LocalDateTime endDate;
 
 	private String title;
-	
+
 	private String description;
-	
-    private String status;
+
+	private String status;
 
 	private Integer projectId;
-	
+
 	private Integer assignedTo;
 
 	public Integer getId() {
@@ -83,5 +83,5 @@ public class TaskDTO extends AuditDTO{
 	public void setAssignedTo(Integer assignedTo) {
 		this.assignedTo = assignedTo;
 	}
-	
+
 }

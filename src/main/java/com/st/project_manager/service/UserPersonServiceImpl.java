@@ -5,13 +5,14 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.st.project_manager.Dto.UserPersonDTO;
-import com.st.project_manager.Entity.UserPerson;
-import com.st.project_manager.exception.handler.DuplicateKeyException;
+import com.st.project_manager.dto.UserPersonDTO;
+import com.st.project_manager.entity.UserPerson;
 import com.st.project_manager.repository.UserPersonRepository;
+
+import constant.UserStatus;
 
 @Service
 public class UserPersonServiceImpl implements UserPersonService {
@@ -24,18 +25,16 @@ public class UserPersonServiceImpl implements UserPersonService {
 		this.modelMapper = modelMapper;
 	}
 
+	@Transactional
 	@Override
 	public UserPersonDTO createUserPerson(UserPersonDTO userPerson) {
-		try {
-			UserPerson userPersonToSave = modelMapper.map(userPerson, UserPerson.class);
-			UserPersonDTO userPersonCreated = modelMapper.map(userPersonRepository.save(userPersonToSave),
-					UserPersonDTO.class);
-			return userPersonCreated;
-		} catch (DataIntegrityViolationException ex) {
-			throw new DuplicateKeyException(ex.getMessage());
-		}
+		UserPerson userPersonToSave = modelMapper.map(userPerson, UserPerson.class);
+		UserPersonDTO userPersonCreated = modelMapper.map(userPersonRepository.save(userPersonToSave),
+				UserPersonDTO.class);
+		return userPersonCreated;
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<UserPersonDTO> getAllUserPerson() {
 		List<UserPerson> userPersonEntities = (List<UserPerson>) userPersonRepository.findAll();
@@ -45,6 +44,7 @@ public class UserPersonServiceImpl implements UserPersonService {
 		return userPersonDTOList;
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public Optional<UserPersonDTO> getUserPersonById(Integer id) {
 
@@ -52,16 +52,44 @@ public class UserPersonServiceImpl implements UserPersonService {
 		return Optional.ofNullable(userPersonDto);
 	}
 
+	@Transactional
 	@Override
 	public UserPersonDTO updateUserPerson(Integer id, UserPersonDTO userPerson) {
-		// TODO Auto-generated method stub
-		return null;
+		UserPersonDTO userPersonToUpdateDTO = modelMapper.map(userPersonRepository.findById(id).get(), UserPersonDTO.class);
+		if (userPerson.getEmail() != null && !userPerson.getEmail().isBlank()) {
+			userPersonToUpdateDTO.setEmail(userPerson.getEmail());
+		}
+
+		if (userPerson.getFirstName() != null && !userPerson.getFirstName().isBlank()) {
+			userPersonToUpdateDTO.setFirstName(userPerson.getFirstName());
+
+		}
+
+		if (userPerson.getLastName() != null && !userPerson.getLastName().isBlank()) {
+			userPersonToUpdateDTO.setLastName(userPerson.getLastName());
+		}
+
+		if (userPerson.getUserName() != null && !userPerson.getUserName().isBlank()) {
+			userPersonToUpdateDTO.setUserName(userPerson.getUserName());
+		}
+
+		UserPerson userPersonUdated = modelMapper.map(userPersonToUpdateDTO, UserPerson.class);
+		return modelMapper.map(userPersonRepository.save(userPersonUdated), UserPersonDTO.class);
 	}
 
+	@Transactional
 	@Override
-	public void deleteUserPerson(Integer id) {
-		// TODO Auto-generated method stub
+	public Optional<UserPersonDTO> deleteUserPerson(Integer id) {
 
+		Optional<UserPerson> userPerson = userPersonRepository.findById(id);
+
+		if (userPerson.isPresent()) {
+			UserPersonDTO userPersonDTO = modelMapper.map(userPerson, UserPersonDTO.class);
+			userPersonDTO.setStatus(UserStatus.DEACTIVE);
+			userPersonRepository.save(modelMapper.map(userPersonDTO, UserPerson.class));
+			return Optional.of(userPersonDTO);
+		}
+		return Optional.empty();
 	}
 
 }

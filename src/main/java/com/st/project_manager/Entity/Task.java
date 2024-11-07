@@ -1,4 +1,4 @@
-package com.st.project_manager.Entity;
+package com.st.project_manager.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,20 +25,20 @@ public class Task extends Audit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@Column(name = "start_date", updatable = false, nullable = false)
-    private LocalDateTime startDate;
-	
+	private LocalDateTime startDate;
+
 	@Column(name = "end_date", updatable = false, nullable = false)
-    private LocalDateTime endDate;
+	private LocalDateTime endDate;
 
 	@Column(unique = true, nullable = false)
 	private String title;
-	
+
 	private String description;
-	
+
 	@Enumerated(EnumType.STRING)
-    private TaskStatus status;
+	private TaskStatus status;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "project_id")
@@ -49,7 +49,7 @@ public class Task extends Audit {
 
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Comment> comments;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "assigned_to")
 	private UserPerson userPerson;
@@ -134,5 +134,4 @@ public class Task extends Audit {
 		this.userPerson = userPerson;
 	}
 
-	
 }

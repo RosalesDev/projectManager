@@ -1,4 +1,4 @@
-package com.st.project_manager.Dto;
+package com.st.project_manager.dto;
 
 import java.util.Date;
 

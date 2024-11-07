@@ -1,8 +1,8 @@
-package com.st.project_manager.Dto;
+package com.st.project_manager.dto;
 
 import java.time.LocalDateTime;
 
-public abstract class AuditDTO{
+public abstract class AuditDTO {
 	private LocalDateTime dateCreated;
 
 	private LocalDateTime dateModified;
@@ -10,7 +10,6 @@ public abstract class AuditDTO{
 	private Integer createdBy;
 
 	private Integer modifiedBy;
-
 
 	public LocalDateTime getDateCreated() {
 		return dateCreated;

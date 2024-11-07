@@ -1,9 +1,10 @@
-package com.st.project_manager.Entity;
+package com.st.project_manager.entity;
 
 import java.util.Set;
 
 import com.st.project_manager.audit.Audit;
 
+import constant.ProjectStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,20 +20,20 @@ public class Project extends Audit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	private String name;
 	private String description;
-	private String status;
-	
+	private ProjectStatus status;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "manager_person_id")
 	private UserPerson manager;
-	
-//	@OneToMany(mappedBy = "project")
-//	private Set<ProjectHasUserPerson> userPersonList;
-	
+
+	// @OneToMany(mappedBy = "project")
+	// private Set<ProjectHasUserPerson> userPersonList;
+
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Task> task;
+	private Set<Task> task;
 
 	public Integer getId() {
 		return id;
@@ -58,11 +59,11 @@ public class Project extends Audit {
 		this.description = description;
 	}
 
-	public String getStatus() {
+	public ProjectStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(ProjectStatus status) {
 		this.status = status;
 	}
 
@@ -74,7 +75,6 @@ public class Project extends Audit {
 		this.manager = userPerson;
 	}
 
-
 	public Set<Task> getTask() {
 		return task;
 	}
@@ -82,6 +82,5 @@ public class Project extends Audit {
 	public void setTask(Set<Task> task) {
 		this.task = task;
 	}
-	
-	
+
 }
