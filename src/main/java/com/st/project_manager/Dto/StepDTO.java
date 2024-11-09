@@ -1,8 +1,12 @@
 package com.st.project_manager.dto;
 
+import constant.StepStatus;
+
 public class StepDTO extends AuditDTO {
 
 	private Integer id;
+
+	private String name;
 
 	private String description;
 
@@ -10,7 +14,7 @@ public class StepDTO extends AuditDTO {
 
 	private Integer taskId;
 
-	private String status;
+	private StepStatus status;
 
 	public Integer getId() {
 		return id;
@@ -44,12 +48,26 @@ public class StepDTO extends AuditDTO {
 		this.taskId = taskId;
 	}
 
-	public String getStatus() {
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public StepStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(StepStatus status) {
 		this.status = status;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String toString() {
+		return "StepDTO [id=" + id + ", name=" + name + ", description=" + description + ", isFinalized=" + isFinalized
+				+ ", taskId=" + taskId + ", status=" + status + "]";
 	}
 
 }

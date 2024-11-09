@@ -8,7 +8,7 @@ public class ProjectHasUserPersonDTO extends AuditDTO {
 
 	private Integer projectId;
 
-	private String status;
+	private Boolean enable;
 
 	public Integer getId() {
 		return id;
@@ -34,12 +34,12 @@ public class ProjectHasUserPersonDTO extends AuditDTO {
 		this.projectId = projectId;
 	}
 
-	public String getStatus() {
-		return status;
+	public Boolean getEnable() {
+		return enable;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setEnable(Boolean enable) {
+		this.enable = enable;
 	}
 
 }

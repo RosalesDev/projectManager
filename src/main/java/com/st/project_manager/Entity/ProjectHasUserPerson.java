@@ -25,7 +25,12 @@ public class ProjectHasUserPerson extends Audit {
 	@JoinColumn(name = "project_id")
 	private Project project;
 
-	private String status;
+	private Boolean enable;
+
+	public ProjectHasUserPerson(Integer projectId, Integer userPersonId) {
+		this.project.setId(projectId);
+		this.userPerson.setId(userPersonId);
+	}
 
 	public Integer getId() {
 		return id;
@@ -39,24 +44,40 @@ public class ProjectHasUserPerson extends Audit {
 		return userPerson;
 	}
 
+	public Integer getUserPersonId() {
+		return this.project.getId();
+	}
+
 	public void setUserPerson(UserPerson userPerson) {
 		this.userPerson = userPerson;
+	}
+
+	public void setUserPersonId(Integer id) {
+		this.userPerson.setId(id);
 	}
 
 	public Project getProject() {
 		return project;
 	}
 
+	public Integer getProjectId() {
+		return this.project.getId();
+	}
+
 	public void setProject(Project project) {
 		this.project = project;
 	}
 
-	public String getStatus() {
-		return status;
+	public void setProjectId(Integer id) {
+		this.project.setId(id);
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public Boolean getEnable() {
+		return enable;
+	}
+
+	public void setEnable(Boolean enable) {
+		this.enable = enable;
 	}
 
 }

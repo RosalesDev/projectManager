@@ -20,9 +20,12 @@ public class Step extends Audit {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(unique = true)
+	@Column(nullable = false)
+	private String name;
+
 	private String description;
 
+	@Column(columnDefinition = "BIT DEFAULT 1")
 	private boolean isFinalized;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -70,6 +73,14 @@ public class Step extends Audit {
 
 	public void setStatus(StepStatus status) {
 		this.status = status;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }
