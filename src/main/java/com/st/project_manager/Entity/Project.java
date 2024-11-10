@@ -7,6 +7,8 @@ import com.st.project_manager.audit.Audit;
 import constant.ProjectStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,16 +25,15 @@ public class Project extends Audit {
 
 	private String name;
 	private String description;
+
+	@Enumerated(EnumType.STRING)
 	private ProjectStatus status;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "manager_person_id")
 	private UserPerson manager;
 
-	// @OneToMany(mappedBy = "project")
-	// private Set<ProjectHasUserPerson> userPersonList;
-
-	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
 	private Set<Task> task;
 
 	public Integer getId() {

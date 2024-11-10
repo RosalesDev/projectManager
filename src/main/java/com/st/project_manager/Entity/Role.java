@@ -2,6 +2,7 @@ package com.st.project_manager.entity;
 
 import com.st.project_manager.audit.Audit;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,6 +17,7 @@ public class Role extends Audit {
 
   private String code;
   private String name;
+  @Column(columnDefinition = "BIT DEFAULT 1")
   private Boolean enable;
   private String description;
 

@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
   @Override
   @Transactional
   public Optional<CommentDTO> createComment(CommentDTO commentDTO) {
-    if (commentDTO.getId() != null || commentDTO.getPersonId() == null || commentDTO.getText() == null) {
+    if (commentDTO.getId() != null || commentDTO.getUserPersonId() == null || commentDTO.getText() == null) {
       throw new IllegalArgumentException("El comentario no es válido.");
     }
     Comment comment = commentMapper.toEntity(commentDTO);
@@ -60,16 +60,21 @@ public class CommentServiceImpl implements CommentService {
   @Override
   @Transactional
   public Optional<CommentDTO> updateComment(Integer id, CommentDTO commentDTO) {
+    if (id == null || id < 0) {
+      throw new ResourceNotFoundException("El ID no es válido.");
+    }
     Optional<Comment> comment = commentRepository.findById(id);
 
-    if (comment.isPresent()) {
-      Comment commentToSave = comment.get();
-      commentToSave.setText(commentDTO.getText());
-      commentToSave.setStatus(commentDTO.getStatus());
-      Comment savedComment = commentRepository.save(commentToSave);
-      return Optional.of(commentMapper.toDTO(savedComment));
+    if (comment.isEmpty()) {
+      throw new ResourceNotFoundException("El comentario con ID: " + id + "no existe");
     }
-    return Optional.empty();
+
+    Comment commentToSave = comment.get();
+    commentToSave.setText(commentDTO.getText());
+    commentToSave.setStatus(commentDTO.getStatus());
+    Comment savedComment = commentRepository.save(commentToSave);
+
+    return Optional.of(commentMapper.toDTO(savedComment));
   }
 
   @Override
@@ -85,5 +90,47 @@ public class CommentServiceImpl implements CommentService {
 
     comment.get().setStatus(CommentStatus.DELETED);
     return Optional.empty();
+  }
+
+  @Override
+  public List<CommentDTO> getCommentByPersonId(Integer id) {
+    if (id == null || id < 0) {
+      throw new ResourceNotFoundException("El ID no es válido.");
+    }
+    List<Comment> comments = commentRepository.findByUserPersonId(id);
+
+    if (comments.isEmpty()) {
+      throw new ResourceNotFoundException("No hay comentarios para el usuario con ID: " + id);
+    }
+
+    return commentMapper.toDTOList(comments);
+  }
+
+  @Override
+  public List<CommentDTO> getCommentByTaskId(Integer id) {
+    if (id == null || id < 0) {
+      throw new ResourceNotFoundException("El ID no es válido.");
+    }
+    List<Comment> comments = commentRepository.findByTaskId(id);
+
+    if (comments.isEmpty()) {
+      throw new ResourceNotFoundException("No hay comentarios para la tarea con ID: " + id);
+    }
+
+    return commentMapper.toDTOList(comments);
+  }
+
+  @Override
+  public List<CommentDTO> getCommentByStepId(Integer id) {
+    if (id == null || id < 0) {
+      throw new ResourceNotFoundException("El ID no es válido.");
+    }
+    List<Comment> comments = commentRepository.findByStepId(id);
+
+    if (comments.isEmpty()) {
+      throw new ResourceNotFoundException("No hay comentarios para el paso con ID: " + id);
+    }
+
+    return commentMapper.toDTOList(comments);
   }
 }

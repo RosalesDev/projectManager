@@ -13,6 +13,12 @@ public interface CommentService {
 
   Optional<CommentDTO> getCommentById(Integer id);
 
+  List<CommentDTO> getCommentByPersonId(Integer id);
+
+  List<CommentDTO> getCommentByTaskId(Integer id);
+
+  List<CommentDTO> getCommentByStepId(Integer id);
+
   Optional<CommentDTO> updateComment(Integer id, CommentDTO commentDTO);
 
   Optional<CommentDTO> deleteComment(Integer id);

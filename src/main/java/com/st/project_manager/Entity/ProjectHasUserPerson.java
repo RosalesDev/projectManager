@@ -2,6 +2,7 @@ package com.st.project_manager.entity;
 
 import com.st.project_manager.audit.Audit;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +26,7 @@ public class ProjectHasUserPerson extends Audit {
 	@JoinColumn(name = "project_id")
 	private Project project;
 
+	@Column(columnDefinition = "BIT DEFAULT 1")
 	private Boolean enable;
 
 	public Integer getId() {

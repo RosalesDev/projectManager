@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/v1/project-user")
 public class ProjectHasUserPersonController {
 
-  ProjectHasUserPersonService phupService;
+  private final ProjectHasUserPersonService phupService;
 
   public ProjectHasUserPersonController(ProjectHasUserPersonService phupService) {
     this.phupService = phupService;
@@ -26,9 +26,6 @@ public class ProjectHasUserPersonController {
 
   @PostMapping("/create")
   public Optional<ProjectHasUserPersonDTO> createProjectHasUserPerson(@RequestBody ProjectHasUserPersonDTO phupDto) {
-
-    // Optional<ProjectHasUserPersonDTO> phup =
-    // phupService.createProjectHasUserPerson(projectId, userPersonId);
     return phupService.createProjectHasUserPerson(phupDto);
   }
 

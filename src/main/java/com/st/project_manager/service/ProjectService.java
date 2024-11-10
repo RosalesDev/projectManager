@@ -10,6 +10,8 @@ public interface ProjectService {
 
   List<ProjectDTO> getAllProject();
 
+  List<ProjectDTO> getAllProjectByManager(Integer id);
+
   Optional<ProjectDTO> getProjectById(Integer id);
 
   Optional<ProjectDTO> updateProject(Integer id, ProjectDTO projectDTO);

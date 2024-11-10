@@ -2,6 +2,7 @@ package com.st.project_manager.entity;
 
 import com.st.project_manager.audit.Audit;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +25,7 @@ public class UserPersonHasRole extends Audit {
   @JoinColumn(name = "role_id", nullable = false)
   private Role role;
 
+  @Column(columnDefinition = "BIT DEFAULT 1")
   private Boolean enable;
 
   public Integer getId() {

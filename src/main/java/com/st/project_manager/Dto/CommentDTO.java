@@ -5,7 +5,7 @@ import constant.CommentStatus;
 public class CommentDTO extends AuditDTO {
 	private Integer id;
 	private String text;
-	private Integer personId;
+	private Integer userPersonId;
 	private Integer taskId;
 	private Integer stepId;
 	private CommentStatus status;
@@ -24,14 +24,6 @@ public class CommentDTO extends AuditDTO {
 
 	public void setText(String text) {
 		this.text = text;
-	}
-
-	public Integer getPersonId() {
-		return personId;
-	}
-
-	public void setPersonId(Integer personId) {
-		this.personId = personId;
 	}
 
 	public Integer getTaskId() {
@@ -56,6 +48,14 @@ public class CommentDTO extends AuditDTO {
 
 	public void setStatus(CommentStatus status) {
 		this.status = status;
+	}
+
+	public Integer getUserPersonId() {
+		return userPersonId;
+	}
+
+	public void setUserPersonId(Integer userPersonId) {
+		this.userPersonId = userPersonId;
 	}
 
 }
