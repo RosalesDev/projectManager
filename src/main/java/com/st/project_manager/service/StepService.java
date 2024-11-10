@@ -14,5 +14,5 @@ public interface StepService {
 
   Optional<StepDTO> updateStep(Integer id, StepDTO StepDTO);
 
-  Optional<StepDTO> deleteStep(Integer id);
+  void deleteStep(Integer id);
 }

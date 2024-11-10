@@ -27,11 +27,6 @@ public class ProjectHasUserPerson extends Audit {
 
 	private Boolean enable;
 
-	public ProjectHasUserPerson(Integer projectId, Integer userPersonId) {
-		this.project.setId(projectId);
-		this.userPerson.setId(userPersonId);
-	}
-
 	public Integer getId() {
 		return id;
 	}
@@ -44,32 +39,16 @@ public class ProjectHasUserPerson extends Audit {
 		return userPerson;
 	}
 
-	public Integer getUserPersonId() {
-		return this.project.getId();
-	}
-
 	public void setUserPerson(UserPerson userPerson) {
 		this.userPerson = userPerson;
-	}
-
-	public void setUserPersonId(Integer id) {
-		this.userPerson.setId(id);
 	}
 
 	public Project getProject() {
 		return project;
 	}
 
-	public Integer getProjectId() {
-		return this.project.getId();
-	}
-
 	public void setProject(Project project) {
 		this.project = project;
-	}
-
-	public void setProjectId(Integer id) {
-		this.project.setId(id);
 	}
 
 	public Boolean getEnable() {

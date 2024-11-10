@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import com.st.project_manager.dto.ErrorDTO;
+import com.st.project_manager.exception.handler.ResourceNotFoundException;
 
 @RestControllerAdvice
 public class HandlerExceptionController {
@@ -30,9 +31,14 @@ public class HandlerExceptionController {
     ErrorDTO errorDTO = new ErrorDTO();
 
     errorDTO.setDate(new Date());
-    errorDTO.setError("Se está intentano duplicar un dato.");
+    errorDTO.setError("Error en los datos.");
     errorDTO.setMessage(ex.getMessage());
     errorDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
     return ResponseEntity.internalServerError().body(errorDTO);
+  }
+
+  @ExceptionHandler(ResourceNotFoundException.class)
+  public ResponseEntity<String> handleResourceNotFound(ResourceNotFoundException ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
   }
 }

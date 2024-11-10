@@ -26,12 +26,12 @@ public class StepController {
     // this.modelMapper = modelMapper;
   }
 
-  @PostMapping("/createStep")
+  @PostMapping("/create-step")
   public Optional<StepDTO> postMethodName(@RequestBody StepDTO stepDto) {
     return stepService.createStep(stepDto);
   }
 
-  @GetMapping("/allSteps/{taskId}")
+  @GetMapping("/by-task/{taskId}")
   public List<StepDTO> getAllStepByTaskId(@PathVariable Integer taskId) {
     return stepService.getAllStepByTaskId(taskId);
   }

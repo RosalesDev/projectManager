@@ -11,7 +11,7 @@ import com.st.project_manager.dto.ProjectHasUserPersonDTO;
 @Service
 public interface ProjectHasUserPersonService {
 
-  Optional<ProjectHasUserPersonDTO> createProjectHasUserPerson(Integer projectId, Integer UserPersonId);
+  Optional<ProjectHasUserPersonDTO> createProjectHasUserPerson(ProjectHasUserPersonDTO phupDto);
 
   List<ProjectDTO> getAllProjectHasUserPersonByPersonId(Integer personId);
 
@@ -20,5 +20,5 @@ public interface ProjectHasUserPersonService {
   Optional<ProjectHasUserPersonDTO> updateProjectHasUserPerson(Integer id,
       ProjectHasUserPersonDTO ProjectHasUserPersonDTO);
 
-  Optional<ProjectHasUserPersonDTO> deleteProjectHasUserPerson(Integer id);
+  void deleteProjectHasUserPerson(Integer id);
 }

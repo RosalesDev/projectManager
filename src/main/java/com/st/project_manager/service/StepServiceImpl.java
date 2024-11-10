@@ -3,49 +3,60 @@ package com.st.project_manager.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.st.project_manager.dto.StepDTO;
 import com.st.project_manager.entity.Step;
+import com.st.project_manager.exception.handler.ResourceNotFoundException;
+import com.st.project_manager.mapper.StepMapper;
 import com.st.project_manager.repository.StepRepository;
 
 @Service
 public class StepServiceImpl implements StepService {
 
   private final StepRepository stepRepository;
-  private final ModelMapper modelMapper;
+  private final StepMapper stepMapper;
 
-  public StepServiceImpl(StepRepository stepRepository, ModelMapper modelMapper) {
+  public StepServiceImpl(StepRepository stepRepository, StepMapper stepMapper) {
     this.stepRepository = stepRepository;
-    this.modelMapper = modelMapper;
+    this.stepMapper = stepMapper;
   }
 
   @Override
   @Transactional
   public Optional<StepDTO> createStep(StepDTO stepDTO) {
-    Step step = modelMapper.map(stepDTO, Step.class);
+    Step step = stepMapper.toEntity(stepDTO);
     Step savedStep = stepRepository.save(step);
-    return Optional.of(modelMapper.map(savedStep, StepDTO.class));
+    return Optional.of(stepMapper.toDTO(savedStep));
   }
 
   @Override
   public List<StepDTO> getAllStepByTaskId(Integer taskId) {
-    List<Step> stepList = stepRepository.findAllByTaskId(taskId);
-    stepList.forEach(step -> System.out.println(step.toString()));
-    return modelMapper.map(stepList, new TypeToken<List<StepDTO>>() {
-    }.getType());
-    // return stepRepository.findAllStepByTaskId(taskId).stream()
-    // .map(step -> modelMapper.map(step, StepDTO.class))
-    // .toList();
+    if (taskId == null || taskId < 0) {
+      throw new IllegalArgumentException("ID no válido.");
+    }
+
+    List<Step> steps = stepRepository.findAllByTaskId(taskId);
+
+    if (steps.isEmpty()) {
+      throw new ResourceNotFoundException("No se encontraron pasos para la tarea con ID: " + taskId);
+    }
+    return steps.stream()
+        .map(stepMapper::toDTO)
+        .toList();
   }
 
   @Override
   public Optional<StepDTO> getStepById(Integer id) {
-    return stepRepository.findById(id)
-        .map(step -> modelMapper.map(step, StepDTO.class));
+    if (id == null || id < 0) {
+      throw new IllegalArgumentException("ID no válido.");
+    }
+    Optional<Step> step = stepRepository.findById(id);
+    if (step.isEmpty()) {
+      throw new ResourceNotFoundException("No se encontro el paso con ID: " + id);
+    }
+    return step.map(stepMapper::toDTO);
   }
 
   @Override
@@ -55,17 +66,25 @@ public class StepServiceImpl implements StepService {
       existingStep.setName(stepDTO.getName());
       existingStep.setDescription(stepDTO.getDescription());
       Step updatedStep = stepRepository.save(existingStep);
-      return modelMapper.map(updatedStep, StepDTO.class);
+      return stepMapper.toDTO(updatedStep);
     });
   }
 
   @Override
   @Transactional
-  public Optional<StepDTO> deleteStep(Integer id) {
-    return stepRepository.findById(id).map(step -> {
-      stepRepository.delete(step);
-      return modelMapper.map(step, StepDTO.class);
-    });
+  public void deleteStep(Integer id) {
+
+    if (id == null || id < 0) {
+      throw new IllegalArgumentException("ID no válido.");
+    }
+
+    Optional<Step> step = stepRepository.findById(id);
+
+    if (step.isEmpty()) {
+      throw new ResourceNotFoundException("No se encontro el paso con ID: " + id);
+    }
+
+    stepRepository.deleteById(id);
   }
 
 }
