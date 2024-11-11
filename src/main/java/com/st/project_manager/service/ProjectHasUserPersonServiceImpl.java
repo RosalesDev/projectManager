@@ -10,7 +10,7 @@ import com.st.project_manager.dto.ProjectDTO;
 import com.st.project_manager.dto.ProjectHasUserPersonDTO;
 import com.st.project_manager.entity.Project;
 import com.st.project_manager.entity.ProjectHasUserPerson;
-import com.st.project_manager.exception.handler.ResourceNotFoundException;
+import com.st.project_manager.exception.ResourceNotFoundException;
 import com.st.project_manager.mapper.ProjectHasUserPersonMapper;
 import com.st.project_manager.mapper.ProjectMapper;
 import com.st.project_manager.repository.ProjectHasUserPersonRepository;

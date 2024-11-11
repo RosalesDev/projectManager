@@ -7,5 +7,4 @@ import com.st.project_manager.entity.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {
-
 }

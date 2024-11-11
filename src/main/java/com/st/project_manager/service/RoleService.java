@@ -3,6 +3,8 @@ package com.st.project_manager.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
+
 import com.st.project_manager.dto.RoleDTO;
 
 public interface RoleService {
@@ -14,5 +16,5 @@ public interface RoleService {
 
   Optional<RoleDTO> updateRole(Integer id, RoleDTO RoleDTO);
 
-  Optional<RoleDTO> deleteRole(Integer id);
+  ResponseEntity<String> deleteRoleById(Integer id);
 }

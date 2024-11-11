@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import com.st.project_manager.dto.ErrorDTO;
-import com.st.project_manager.exception.handler.ResourceNotFoundException;
+import com.st.project_manager.exception.ResourceNotFoundException;
 
 @RestControllerAdvice
 public class HandlerExceptionController {
@@ -19,8 +19,8 @@ public class HandlerExceptionController {
   public ResponseEntity<ErrorDTO> handleGlobalException(Exception ex, WebRequest request) {
     ErrorDTO errorDTO = new ErrorDTO();
     errorDTO.setDate(new Date());
-    errorDTO.setError("Ocurrió un problema.");
-    errorDTO.setMessage(ex.getMessage());
+    errorDTO.setError(ex.toString());
+    errorDTO.setMessage(ex.getCause().getMessage());
     errorDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 
     return ResponseEntity.internalServerError().body(errorDTO);

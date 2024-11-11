@@ -8,7 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.st.project_manager.dto.CommentDTO;
 import com.st.project_manager.entity.Comment;
-import com.st.project_manager.exception.handler.ResourceNotFoundException;
+import com.st.project_manager.exception.InvalidIdException;
+import com.st.project_manager.exception.ResourceNotFoundException;
 import com.st.project_manager.mapper.CommentMapper;
 import com.st.project_manager.repository.CommentRepository;
 
@@ -48,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
   @Override
   public Optional<CommentDTO> getCommentById(Integer id) {
     if (id == null || id < 0) {
-      throw new ResourceNotFoundException("El ID no es válido.");
+      throw new InvalidIdException();
     }
     Optional<Comment> comment = commentRepository.findById(id);
     if (comment.isEmpty()) {
@@ -61,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
   @Transactional
   public Optional<CommentDTO> updateComment(Integer id, CommentDTO commentDTO) {
     if (id == null || id < 0) {
-      throw new ResourceNotFoundException("El ID no es válido.");
+      throw new InvalidIdException();
     }
     Optional<Comment> comment = commentRepository.findById(id);
 
@@ -81,7 +82,7 @@ public class CommentServiceImpl implements CommentService {
   @Transactional
   public Optional<CommentDTO> deleteComment(Integer id) {
     if (id == null || id < 0) {
-      throw new ResourceNotFoundException("El ID no es válido.");
+      throw new InvalidIdException();
     }
     Optional<Comment> comment = commentRepository.findById(id);
     if (comment.isEmpty()) {
@@ -95,7 +96,7 @@ public class CommentServiceImpl implements CommentService {
   @Override
   public List<CommentDTO> getCommentByPersonId(Integer id) {
     if (id == null || id < 0) {
-      throw new ResourceNotFoundException("El ID no es válido.");
+      throw new InvalidIdException();
     }
     List<Comment> comments = commentRepository.findByUserPersonId(id);
 
@@ -109,7 +110,7 @@ public class CommentServiceImpl implements CommentService {
   @Override
   public List<CommentDTO> getCommentByTaskId(Integer id) {
     if (id == null || id < 0) {
-      throw new ResourceNotFoundException("El ID no es válido.");
+      throw new InvalidIdException();
     }
     List<Comment> comments = commentRepository.findByTaskId(id);
 
@@ -123,7 +124,7 @@ public class CommentServiceImpl implements CommentService {
   @Override
   public List<CommentDTO> getCommentByStepId(Integer id) {
     if (id == null || id < 0) {
-      throw new ResourceNotFoundException("El ID no es válido.");
+      throw new InvalidIdException();
     }
     List<Comment> comments = commentRepository.findByStepId(id);
 

@@ -3,6 +3,8 @@ package com.st.project_manager.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
+
 import com.st.project_manager.dto.StepDTO;
 
 public interface StepService {
@@ -14,5 +16,5 @@ public interface StepService {
 
   Optional<StepDTO> updateStep(Integer id, StepDTO StepDTO);
 
-  void deleteStep(Integer id);
+  ResponseEntity<String> deleteStepById(Integer id);
 }

@@ -1,4 +1,4 @@
-package com.st.project_manager.exception.handler;
+package com.st.project_manager.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
   public ResourceNotFoundException(String message) {

@@ -3,12 +3,13 @@ package com.st.project_manager.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.st.project_manager.dto.StepDTO;
 import com.st.project_manager.entity.Step;
-import com.st.project_manager.exception.handler.ResourceNotFoundException;
+import com.st.project_manager.exception.ResourceNotFoundException;
 import com.st.project_manager.mapper.StepMapper;
 import com.st.project_manager.repository.StepRepository;
 
@@ -72,7 +73,7 @@ public class StepServiceImpl implements StepService {
 
   @Override
   @Transactional
-  public void deleteStep(Integer id) {
+  public ResponseEntity<String> deleteStepById(Integer id) {
 
     if (id == null || id < 0) {
       throw new IllegalArgumentException("ID no válido.");
@@ -85,6 +86,8 @@ public class StepServiceImpl implements StepService {
     }
 
     stepRepository.deleteById(id);
+
+    return ResponseEntity.ok("El paso con ID " + id + " fue eliminado con éxito.");
   }
 
 }
