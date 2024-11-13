@@ -11,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.st.project_manager.dto.ErrorDTO;
 import com.st.project_manager.exception.ResourceNotFoundException;
+import com.st.project_manager.exception.UserNotInProjectException;
 
 @RestControllerAdvice
 public class HandlerExceptionController {
@@ -40,5 +41,10 @@ public class HandlerExceptionController {
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<String> handleResourceNotFound(ResourceNotFoundException ex) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+  }
+
+  @ExceptionHandler(UserNotInProjectException.class)
+  public ResponseEntity<String> handleUserNotInProjectException(UserNotInProjectException ex) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
   }
 }

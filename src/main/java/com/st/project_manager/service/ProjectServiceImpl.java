@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.st.project_manager.dto.ProjectDTO;
 import com.st.project_manager.entity.Project;
 import com.st.project_manager.entity.UserPerson;
+import com.st.project_manager.exception.InvalidIdException;
 import com.st.project_manager.exception.ProjectAlreadyHasManagerException;
 import com.st.project_manager.exception.ResourceNotFoundException;
 import com.st.project_manager.mapper.ProjectMapper;
@@ -125,4 +126,36 @@ public class ProjectServiceImpl implements ProjectService {
     return Optional.empty();
   }
 
+  @Override
+  public Optional<ProjectDTO> updateProjectManagerId(Integer projectId, Integer managerId) {
+    if (projectId == null || projectId < 0 || managerId == null || managerId < 0) {
+      throw new InvalidIdException();
+    }
+    Optional<Project> project = projectRepository.findById(projectId);
+
+    if (project.isEmpty()) {
+      throw new ResourceNotFoundException("No existe el proyecto con ID:" + projectId);
+    }
+
+    Optional<UserPerson> userPerson = userPersonRepository.findById(managerId);
+
+    if (userPerson.isEmpty()) {
+      throw new ResourceNotFoundException("El usuario con ID: " + managerId + " no existe");
+    }
+    // FALTA VALIDAR QUE EL USUARIO TENGA PERMISOS PARA CAMBIAR DE MANAGER
+    if (project.get().getUserPerson() != null && project.get().getUserPerson().getId() != managerId) {
+      throw new IllegalArgumentException("Solo el manager puede realizar esta acción.");
+    }
+    Project updatedProject = project.get();
+    UserPerson newManager = userPerson.get();
+
+    updatedProject.setUserPerson(newManager);
+
+    Project savedProject = projectRepository.save(updatedProject);
+
+    System.out.println(savedProject.toString());
+
+    return Optional.of(projectMapper.toDTO(savedProject));
+
+  }
 }

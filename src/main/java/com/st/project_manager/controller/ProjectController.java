@@ -1,10 +1,13 @@
 package com.st.project_manager.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.st.project_manager.dto.ProjectDTO;
 import com.st.project_manager.service.ProjectService;
+
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,13 +29,18 @@ public class ProjectController {
   }
 
   @PostMapping("/create")
-  public Optional<ProjectDTO> createProject(@RequestBody ProjectDTO projectDto) {
+  public Optional<ProjectDTO> createProject(@Valid @RequestBody ProjectDTO projectDto) {
     return projectService.createProject(projectDto);
   }
 
   @PutMapping("/update/{id}")
   public Optional<ProjectDTO> putMethodName(@PathVariable Integer id, @RequestBody ProjectDTO projectDto) {
     return projectService.updateProject(id, projectDto);
+  }
+
+  @PutMapping("/set-project-manager")
+  public Optional<ProjectDTO> putMethodName(@RequestParam Integer projectId, @RequestParam Integer managerId) {
+    return projectService.updateProjectManagerId(projectId, managerId);
   }
 
   @GetMapping("/allProjects")

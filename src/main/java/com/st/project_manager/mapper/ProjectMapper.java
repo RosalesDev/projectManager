@@ -15,6 +15,12 @@ public class ProjectMapper {
 
   public ProjectMapper(ModelMapper modelMapper) {
     this.modelMapper = modelMapper;
+    configureMappings();
+  }
+
+  private void configureMappings() {
+    modelMapper.typeMap(Project.class, ProjectDTO.class)
+        .addMappings(mapper -> mapper.map(src -> src.getUserPerson().getId(), ProjectDTO::setManagerId));
   }
 
   public ProjectDTO toDTO(Project project) {

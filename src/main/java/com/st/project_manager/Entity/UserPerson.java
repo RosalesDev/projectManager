@@ -1,9 +1,12 @@
 package com.st.project_manager.entity;
 
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.st.project_manager.audit.Audit;
 
 import constant.UserStatus;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,6 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class UserPerson extends Audit {
@@ -23,6 +27,9 @@ public class UserPerson extends Audit {
 	private String userName;
 	private String firstName;
 	private String lastName;
+
+	@OneToMany(mappedBy = "userPerson", cascade = CascadeType.ALL)
+	private Set<Task> task;
 
 	@Column(unique = true)
 	private String email;

@@ -17,6 +17,10 @@ public interface ProjectHasUserPersonRepository extends JpaRepository<ProjectHas
   @Query("SELECT phup.project FROM ProjectHasUserPerson phup WHERE phup.userPerson.id = :personId")
   List<Project> findProjectsByUserPersonId(@Param("personId") Integer personId);
 
+  @Query("SELECT COUNT(phup.project) FROM ProjectHasUserPerson phup WHERE phup.userPerson.id = :personId")
+  Optional<Integer> countAllProjectByUserPersonId(Integer personId);
+
   @Query("SELECT phup.project FROM ProjectHasUserPerson phup WHERE phup.project.id = :projectId")
   Optional<ProjectHasUserPerson> findByProjectId(Integer projectId);
+
 }

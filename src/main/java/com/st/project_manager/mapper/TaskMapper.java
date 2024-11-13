@@ -16,6 +16,13 @@ public class TaskMapper {
 
   public TaskMapper(ModelMapper modelMapper) {
     this.modelMapper = modelMapper;
+    configureMappings();
+  }
+
+  private void configureMappings() {
+    modelMapper.typeMap(Task.class, TaskDTO.class)
+        .addMappings(mapper -> mapper.map(src -> src.getUserPerson().getId(),
+            TaskDTO::setUserPersonId));
   }
 
   public TaskDTO toDTO(Task task) {

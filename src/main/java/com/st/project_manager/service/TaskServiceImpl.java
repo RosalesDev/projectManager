@@ -3,46 +3,60 @@ package com.st.project_manager.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.st.project_manager.dto.ProjectDTO;
 import com.st.project_manager.dto.TaskDTO;
+import com.st.project_manager.dto.UserPersonDTO;
 import com.st.project_manager.entity.Project;
 import com.st.project_manager.entity.Task;
 import com.st.project_manager.entity.UserPerson;
 import com.st.project_manager.exception.InvalidIdException;
 import com.st.project_manager.exception.ResourceNotFoundException;
-import com.st.project_manager.mapper.TaskMapper;
-import com.st.project_manager.repository.ProjectRepository;
+import com.st.project_manager.exception.UserNotInProjectException;
+
 import com.st.project_manager.repository.TaskRepository;
-import com.st.project_manager.repository.UserPersonRepository;
 
 @Service
 public class TaskServiceImpl implements TaskService {
 
   private final TaskRepository taskRepository;
-  private final UserPersonRepository userPersonRepository;
-  private final ProjectRepository projectRepository;
-  private final TaskMapper taskMapper;
+  private final UserPersonService userPersonService;
+  private final ProjectService projectService;
+  private final ModelMapper modelMapper;
+  private final ProjectHasUserPersonService phupService;
 
-  public TaskServiceImpl(TaskRepository taskRepository, TaskMapper taskMapper,
-      UserPersonRepository userPersonRepository, ProjectRepository projectRepository) {
+  public TaskServiceImpl(TaskRepository taskRepository, ModelMapper modelMapper,
+      UserPersonService userPersonService, ProjectService projectService,
+      ProjectHasUserPersonService phupService) {
     this.taskRepository = taskRepository;
-    this.taskMapper = taskMapper;
-    this.userPersonRepository = userPersonRepository;
-    this.projectRepository = projectRepository;
+    this.modelMapper = modelMapper;
+    this.userPersonService = userPersonService;
+    this.projectService = projectService;
+    this.phupService = phupService;
   }
 
   @Override
-  public Optional<TaskDTO> createTask(TaskDTO TaskDTO) {
-    Task task = taskRepository.save(taskMapper.toEntity(TaskDTO));
+  public Optional<TaskDTO> createTask(TaskDTO taskDTO) {
 
-    return Optional.of(taskMapper.toDTO(task));
+    if (taskDTO.getUserPersonId() != null) {
+      if (!phupService.userIsInProject(taskDTO.getUserPersonId(), taskDTO.getProjectId())) {
+        throw new UserNotInProjectException();
+      }
+    }
+    Task task = taskRepository.save(modelMapper.map(taskDTO, Task.class));
+    System.out.println(task.toString());
+
+    return Optional.of(modelMapper.map(task, TaskDTO.class));
   }
 
   @Override
   public List<TaskDTO> getAllTasks() {
-    return taskMapper.toDTOList(taskRepository.findAll());
+    return modelMapper.map(taskRepository.findAll(), new TypeToken<List<TaskDTO>>() {
+    }.getType());
   }
 
   @Override
@@ -54,7 +68,7 @@ public class TaskServiceImpl implements TaskService {
     if (task.isEmpty()) {
       throw new ResourceNotFoundException("La tarea con ID: " + id + " no existe.");
     }
-    return Optional.of(taskMapper.toDTO(task.get()));
+    return Optional.of(modelMapper.map(task.get(), TaskDTO.class));
   }
 
   @Override
@@ -63,15 +77,18 @@ public class TaskServiceImpl implements TaskService {
       throw new InvalidIdException();
     }
 
-    Optional<UserPerson> userPerson = userPersonRepository.findById(id);
+    Optional<UserPersonDTO> userPersonOpt = userPersonService.getUserPersonById(id);
 
-    if (userPerson.isEmpty()) {
+    if (userPersonOpt.isEmpty()) {
       throw new ResourceNotFoundException("El usuario con ID: " + id + " no existe.");
     }
 
-    List<Task> tasks = taskRepository.findAllByUserPersonId(userPerson.get());
+    UserPerson userPerson = modelMapper.map(userPersonOpt.get(), UserPerson.class);
 
-    return taskMapper.toDTOList(tasks);
+    List<Task> tasks = taskRepository.findAllByUserPersonId(userPerson);
+
+    return modelMapper.map(tasks, new TypeToken<List<Task>>() {
+    }.getType());
   }
 
   @Override
@@ -86,7 +103,7 @@ public class TaskServiceImpl implements TaskService {
       throw new ResourceNotFoundException("La tarea con ID: " + id + " no existe.");
     }
 
-    TaskDTO updatedTask = taskMapper.toDTO(taskRepository.save(task.get()));
+    TaskDTO updatedTask = modelMapper.map(taskRepository.save(task.get()), TaskDTO.class);
     return Optional.of(updatedTask);
   }
 
@@ -112,15 +129,30 @@ public class TaskServiceImpl implements TaskService {
       throw new InvalidIdException();
     }
 
-    Optional<Project> project = projectRepository.findById(id);
+    Optional<ProjectDTO> project = projectService.getProjectById(id);
 
     if (project.isEmpty()) {
       throw new ResourceNotFoundException("El proyecto con ID: " + id + " no existe.");
     }
 
-    List<Task> tasks = taskRepository.findAllByProjectId(project.get());
+    List<Task> tasks = taskRepository.findAllByProjectId(modelMapper.map(project.get(), Project.class));
 
-    return taskMapper.toDTOList(tasks);
+    return modelMapper.map(tasks, new TypeToken<List<Task>>() {
+    }.getType());
+  }
+
+  @Override
+  public Optional<Integer> countTaskByPersonId(Integer id) {
+    if (id == null || id < 0) {
+      throw new InvalidIdException();
+    }
+    Optional<UserPersonDTO> userPerson = userPersonService.getUserPersonById(id);
+
+    if (userPerson.isEmpty()) {
+      throw new ResourceNotFoundException("El usuario con ID: " + id + " no existe.");
+    }
+
+    return taskRepository.countAllByPersonId(id);
   }
 
 }

@@ -16,5 +16,7 @@ public interface ProjectService {
 
   Optional<ProjectDTO> updateProject(Integer id, ProjectDTO projectDTO);
 
+  Optional<ProjectDTO> updateProjectManagerId(Integer projectId, Integer managerId);
+
   Optional<ProjectDTO> deleteProject(Integer id);
 }

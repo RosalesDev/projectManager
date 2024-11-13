@@ -38,7 +38,7 @@ public class ProjectHasUserPersonServiceImpl implements ProjectHasUserPersonServ
   }
 
   @Override
-  public List<ProjectDTO> getAllProjectHasUserPersonByPersonId(Integer personId) {
+  public List<ProjectDTO> getAllProjectByPersonId(Integer personId) {
     List<Project> entities = repository.findProjectsByUserPersonId(personId);
     return projectMapper.toProjectDTOList(entities);
   }
@@ -73,6 +73,34 @@ public class ProjectHasUserPersonServiceImpl implements ProjectHasUserPersonServ
       throw new ResourceNotFoundException("El ID: " + id + "no existe.");
     }
     repository.delete(phup.get());
+  }
+
+  @Override
+  public Optional<Integer> countAllProjectByUserPersonId(Integer id) {
+    if (id == null || id < 0) {
+      throw new IllegalArgumentException("El ID no es válido.");
+    }
+    Optional<Integer> count = repository.countAllProjectByUserPersonId(id);
+
+    if (count.isEmpty() || count.get() == 0) {
+      throw new ResourceNotFoundException("No se encontraron proyectos para el usuario con ID: " + id);
+    }
+
+    return count;
+  }
+
+  @Override
+  public Boolean userIsInProject(Integer personId, Integer projectId) {
+
+    if (personId == null || personId < 0 || projectId == null || projectId < 0) {
+      throw new IllegalArgumentException("El ID no es válido.");
+    }
+    List<ProjectDTO> projects = getAllProjectByPersonId(personId);
+    if (projects.isEmpty() || !projects.stream().anyMatch(project -> project.getId() == projectId)) {
+      return false;
+    }
+
+    return true;
   }
 
 }

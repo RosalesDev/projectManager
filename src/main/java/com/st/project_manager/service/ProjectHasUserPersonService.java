@@ -13,9 +13,13 @@ public interface ProjectHasUserPersonService {
 
   Optional<ProjectHasUserPersonDTO> createProjectHasUserPerson(ProjectHasUserPersonDTO phupDto);
 
-  List<ProjectDTO> getAllProjectHasUserPersonByPersonId(Integer personId);
+  List<ProjectDTO> getAllProjectByPersonId(Integer personId);
+
+  Optional<Integer> countAllProjectByUserPersonId(Integer id);
 
   Optional<ProjectHasUserPersonDTO> getProjectHasUserPersonByProjectId(Integer projectId);
+
+  Boolean userIsInProject(Integer personId, Integer projectId);
 
   Optional<ProjectHasUserPersonDTO> updateProjectHasUserPerson(Integer id,
       ProjectHasUserPersonDTO ProjectHasUserPersonDTO);

@@ -6,16 +6,17 @@ import com.st.project_manager.audit.Audit;
 
 import constant.ProjectStatus;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 
 @Entity
 public class Project extends Audit {
@@ -27,14 +28,22 @@ public class Project extends Audit {
 	private String description;
 
 	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "VARCHAR(50) DEFAULT 'PLANNING'")
 	private ProjectStatus status;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "manager_person_id")
+	@ManyToOne
+	@JoinColumn(name = "manager_id")
 	private UserPerson manager;
 
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
 	private Set<Task> task;
+
+	@PrePersist
+	public void prePersist() {
+		if (status == null) {
+			status = ProjectStatus.PLANNING;
+		}
+	}
 
 	public Integer getId() {
 		return id;
@@ -82,6 +91,12 @@ public class Project extends Audit {
 
 	public void setTask(Set<Task> task) {
 		this.task = task;
+	}
+
+	@Override
+	public String toString() {
+		return "Project [id=" + id + ", name=" + name + ", description=" + description + ", status=" + status + ", manager="
+				+ manager + ", task=" + task + "]";
 	}
 
 }

@@ -18,6 +18,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Task extends Audit {
@@ -29,7 +31,7 @@ public class Task extends Audit {
 	@Column(name = "start_date", updatable = false, nullable = false)
 	private LocalDateTime startDate;
 
-	@Column(name = "end_date", updatable = false, nullable = false)
+	@Column(name = "end_date", nullable = false)
 	private LocalDateTime endDate;
 
 	@Column(unique = true, nullable = false)
@@ -41,7 +43,8 @@ public class Task extends Audit {
 	private TaskStatus status;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "project_id")
+	@JoinColumn(name = "project_id", nullable = false)
+	@NotNull
 	private Project project;
 
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -53,6 +56,13 @@ public class Task extends Audit {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "assigned_to")
 	private UserPerson userPerson;
+
+	@PrePersist
+	public void prePersist() {
+		if (status == null) {
+			status = TaskStatus.PENDING;
+		}
+	}
 
 	public Integer getId() {
 		return id;
@@ -132,6 +142,13 @@ public class Task extends Audit {
 
 	public void setUserPerson(UserPerson userPerson) {
 		this.userPerson = userPerson;
+	}
+
+	@Override
+	public String toString() {
+		return "Task [id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + ", title=" + title
+				+ ", description=" + description + ", status=" + status + ", project=" + project + ", steps=" + steps
+				+ ", comments=" + comments + ", userPerson=" + userPerson + "]";
 	}
 
 }

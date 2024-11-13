@@ -76,12 +76,19 @@ public class TaskDTO extends AuditDTO {
 		this.projectId = projectId;
 	}
 
-	public Integer getAssignedTo() {
+	public Integer getUserPersonId() {
 		return assignedTo;
 	}
 
-	public void setAssignedTo(Integer assignedTo) {
+	public void setUserPersonId(Integer assignedTo) {
 		this.assignedTo = assignedTo;
+	}
+
+	@Override
+	public String toString() {
+		return "TaskDTO [id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + ", title=" + title
+				+ ", description=" + description + ", status=" + status + ", projectId=" + projectId + ", assignedTo="
+				+ assignedTo + "]";
 	}
 
 }

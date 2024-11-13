@@ -47,6 +47,11 @@ public class TaskController {
     return taskService.getTaskByPersonId(id);
   }
 
+  @GetMapping("/report/count-task-by-user/{id}")
+  public Optional<Integer> countAllTaskByUserPerson(@PathVariable Integer id) {
+    return taskService.countTaskByPersonId(id);
+  }
+
   @DeleteMapping("/delete/{id}")
   public ResponseEntity<String> deleteTask(@PathVariable Integer id) {
     return taskService.deleteTaskById(id);

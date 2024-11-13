@@ -10,7 +10,7 @@ import com.st.project_manager.dto.ProjectDTO;
 import com.st.project_manager.dto.ProjectHasUserPersonDTO;
 import com.st.project_manager.service.ProjectHasUserPersonService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -29,9 +29,14 @@ public class ProjectHasUserPersonController {
     return phupService.createProjectHasUserPerson(phupDto);
   }
 
-  @GetMapping("/by-user")
-  public List<ProjectDTO> getProjectListByUserPersonId(@RequestParam Integer projectId) {
-    return phupService.getAllProjectHasUserPersonByPersonId(projectId);
+  @GetMapping("/by-user/{id}")
+  public List<ProjectDTO> getProjectListByUserPersonId(@PathVariable Integer id) {
+    return phupService.getAllProjectByPersonId(id);
+  }
+
+  @GetMapping("/report/count-projects-by-user/{id}")
+  public Optional<Integer> getMethodName(@PathVariable Integer id) {
+    return phupService.countAllProjectByUserPersonId(id);
   }
 
 }
