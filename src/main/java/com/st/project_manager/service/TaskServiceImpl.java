@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.st.project_manager.dto.ProjectDTO;
+import com.st.project_manager.dto.StepDTO;
 import com.st.project_manager.dto.TaskDTO;
 import com.st.project_manager.dto.UserPersonDTO;
 import com.st.project_manager.entity.Project;
@@ -16,9 +17,13 @@ import com.st.project_manager.entity.Task;
 import com.st.project_manager.entity.UserPerson;
 import com.st.project_manager.exception.InvalidIdException;
 import com.st.project_manager.exception.ResourceNotFoundException;
+import com.st.project_manager.exception.TaskWithoutStepsCompletedException;
 import com.st.project_manager.exception.UserNotInProjectException;
 
 import com.st.project_manager.repository.TaskRepository;
+
+import constant.StepStatus;
+import constant.TaskStatus;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -26,17 +31,20 @@ public class TaskServiceImpl implements TaskService {
   private final TaskRepository taskRepository;
   private final UserPersonService userPersonService;
   private final ProjectService projectService;
+  private final StepService stepService;
   private final ModelMapper modelMapper;
   private final ProjectHasUserPersonService phupService;
 
   public TaskServiceImpl(TaskRepository taskRepository, ModelMapper modelMapper,
       UserPersonService userPersonService, ProjectService projectService,
-      ProjectHasUserPersonService phupService) {
+      ProjectHasUserPersonService phupService,
+      StepService stepService) {
     this.taskRepository = taskRepository;
     this.modelMapper = modelMapper;
     this.userPersonService = userPersonService;
     this.projectService = projectService;
     this.phupService = phupService;
+    this.stepService = stepService;
   }
 
   @Override
@@ -92,7 +100,7 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  public Optional<TaskDTO> updateTask(Integer id, TaskDTO TaskDTO) {
+  public Optional<TaskDTO> updateTask(Integer id, TaskDTO taskDTO) throws RuntimeException {
     if (id == null || id < 0) {
       throw new InvalidIdException();
     }
@@ -103,8 +111,44 @@ public class TaskServiceImpl implements TaskService {
       throw new ResourceNotFoundException("La tarea con ID: " + id + " no existe.");
     }
 
-    TaskDTO updatedTask = modelMapper.map(taskRepository.save(task.get()), TaskDTO.class);
-    return Optional.of(updatedTask);
+    Task updatedTask = task.get();
+
+    if (taskDTO.getStatus() != null && taskDTO.getStatus().equals(TaskStatus.COMPLETED.toString())) {
+      List<StepDTO> stepsDto = stepService.getAllStepByTaskId(id);
+      if (stepsDto.isEmpty() || stepsDto.stream().allMatch(step -> step.getStatus().equals(StepStatus.FINALIZED))) {
+        updatedTask.setStatus(TaskStatus.COMPLETED);
+      }
+      throw new TaskWithoutStepsCompletedException();
+    }
+
+    if (taskDTO.getUserPersonId() != null) {
+      Optional<UserPersonDTO> userPersonOpt = userPersonService.getUserPersonById(taskDTO.getUserPersonId());
+      if (userPersonOpt.isEmpty()) {
+        throw new ResourceNotFoundException("El usuario con ID: " + taskDTO.getUserPersonId() + "no existe.");
+      }
+      updatedTask.setUserPerson(modelMapper.map(userPersonOpt.get(), UserPerson.class));
+    }
+    if (taskDTO.getEndDate() != null) {
+      updatedTask.setEndDate(taskDTO.getEndDate());
+    }
+
+    if (taskDTO.getTitle() != null) {
+      updatedTask.setTitle(taskDTO.getTitle());
+    }
+
+    if (taskDTO.getDescription() != null) {
+      updatedTask.setDescription(taskDTO.getDescription());
+    }
+
+    if (taskDTO.getProjectId() != null) {
+      Optional<ProjectDTO> project = projectService.getProjectById(taskDTO.getProjectId());
+      if (project.isEmpty()) {
+        throw new ResourceNotFoundException("No se encuentra el proyecto con ID:" + taskDTO.getProjectId());
+      }
+      updatedTask.setProject(modelMapper.map(project.get(), Project.class));
+    }
+
+    return Optional.of(modelMapper.map(taskRepository.save(updatedTask), TaskDTO.class));
   }
 
   @Override
@@ -153,6 +197,21 @@ public class TaskServiceImpl implements TaskService {
     }
 
     return taskRepository.countAllByPersonId(id);
+  }
+
+  @Override
+  public List<TaskDTO> searchByTitleOrStatus(String title, String status) {
+    TaskStatus taskStatus = null;
+    if (status != null) {
+      try {
+        taskStatus = TaskStatus.valueOf(status.toUpperCase());
+      } catch (IllegalArgumentException e) {
+        throw new IllegalArgumentException("El estado no es válido: " + status);
+      }
+    }
+    List<Task> taskList = taskRepository.findByTitleContainingIgnoreCaseOrStatus(title, taskStatus);
+    return modelMapper.map(taskList, new TypeToken<List<TaskDTO>>() {
+    }.getType());
   }
 
 }

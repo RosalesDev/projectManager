@@ -1,6 +1,7 @@
 package com.st.project_manager.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.st.project_manager.dto.TaskDTO;
@@ -50,6 +51,13 @@ public class TaskController {
   @GetMapping("/report/count-task-by-user/{id}")
   public Optional<Integer> countAllTaskByUserPerson(@PathVariable Integer id) {
     return taskService.countTaskByPersonId(id);
+  }
+
+  @GetMapping("/search/by-title-status")
+  public ResponseEntity<List<TaskDTO>> searchByTitleOrStatus(@RequestParam(required = false) String title,
+      @RequestParam(required = false) String status) {
+    List<TaskDTO> tasks = taskService.searchByTitleOrStatus(title, status);
+    return ResponseEntity.ok(tasks);
   }
 
   @DeleteMapping("/delete/{id}")

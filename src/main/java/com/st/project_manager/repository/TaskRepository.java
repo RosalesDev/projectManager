@@ -11,6 +11,8 @@ import com.st.project_manager.entity.Project;
 import com.st.project_manager.entity.Task;
 import com.st.project_manager.entity.UserPerson;
 
+import constant.TaskStatus;
+
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer> {
   List<Task> findAllByUserPersonId(UserPerson userPerson);
@@ -19,5 +21,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
 
   @Query("SELECT COUNT(t) FROM Task t WHERE t.userPerson.id = :id")
   Optional<Integer> countAllByPersonId(Integer id);
+
+  List<Task> findByTitleContainingIgnoreCaseOrStatus(String title, TaskStatus status);
 
 }

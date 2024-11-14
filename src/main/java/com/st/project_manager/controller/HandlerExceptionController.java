@@ -11,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.st.project_manager.dto.ErrorDTO;
 import com.st.project_manager.exception.ResourceNotFoundException;
+import com.st.project_manager.exception.TaskWithoutStepsCompletedException;
 import com.st.project_manager.exception.UserNotInProjectException;
 
 @RestControllerAdvice
@@ -45,6 +46,11 @@ public class HandlerExceptionController {
 
   @ExceptionHandler(UserNotInProjectException.class)
   public ResponseEntity<String> handleUserNotInProjectException(UserNotInProjectException ex) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+  }
+
+  @ExceptionHandler(TaskWithoutStepsCompletedException.class)
+  public ResponseEntity<String> handleTaskWithoutStepsCompletedException(TaskWithoutStepsCompletedException ex) {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
   }
 }

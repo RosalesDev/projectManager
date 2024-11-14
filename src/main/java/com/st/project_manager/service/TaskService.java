@@ -21,6 +21,8 @@ public interface TaskService {
 
   List<TaskDTO> getTaskByProjectId(Integer id);
 
+  List<TaskDTO> searchByTitleOrStatus(String title, String status);
+
   Optional<TaskDTO> updateTask(Integer id, TaskDTO TaskDTO);
 
   ResponseEntity<String> deleteTaskById(Integer id);
