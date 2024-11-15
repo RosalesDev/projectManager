@@ -1,6 +1,8 @@
 package com.st.project_manager.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -115,7 +117,7 @@ public class TaskServiceImpl implements TaskService {
 
     if (taskDTO.getStatus() != null && taskDTO.getStatus().equals(TaskStatus.COMPLETED.toString())) {
       List<StepDTO> stepsDto = stepService.getAllStepByTaskId(id);
-      if (stepsDto.isEmpty() || stepsDto.stream().allMatch(step -> step.getStatus().equals(StepStatus.FINALIZED))) {
+      if (stepsDto.isEmpty() || stepsDto.stream().allMatch(step -> step.getStatus().equals(StepStatus.COMPLETED))) {
         updatedTask.setStatus(TaskStatus.COMPLETED);
       }
       throw new TaskWithoutStepsCompletedException();
@@ -212,6 +214,52 @@ public class TaskServiceImpl implements TaskService {
     List<Task> taskList = taskRepository.findByTitleContainingIgnoreCaseOrStatus(title, taskStatus);
     return modelMapper.map(taskList, new TypeToken<List<TaskDTO>>() {
     }.getType());
+  }
+
+  @Override
+  public Optional<Integer> countPendingTaskByProjectId(Integer projectId) {
+    if (projectId == null || projectId < 0) {
+      throw new InvalidIdException();
+    }
+    return taskRepository.countAllPendingByProjectId(projectId);
+  }
+
+  @Override
+  public Map<String, Object> findStartedByProjectId(Integer projectId) {
+    if (projectId == null || projectId < 0) {
+      throw new InvalidIdException();
+    }
+    List<TaskDTO> taskList = modelMapper.map(taskRepository.findAllStartedByProjectId(projectId),
+        new TypeToken<List<TaskDTO>>() {
+        }.getType());
+
+    Integer countStartedTask = taskList.size();
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("projectId", projectId.toString());
+    response.put("countStartedTask", countStartedTask);
+    response.put("taskList", taskList);
+
+    return response;
+  }
+
+  @Override
+  public Map<String, Object> findCompletedByProjectId(Integer projectId) {
+    if (projectId == null || projectId < 0) {
+      throw new InvalidIdException();
+    }
+    List<TaskDTO> taskList = modelMapper.map(taskRepository.findAllCompletedByProjectId(projectId),
+        new TypeToken<List<TaskDTO>>() {
+        }.getType());
+
+    Integer countCompletedTask = taskList.size();
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("projectId", projectId);
+    response.put("countCompletedTask", countCompletedTask);
+    response.put("taskList", taskList);
+
+    return response;
   }
 
 }

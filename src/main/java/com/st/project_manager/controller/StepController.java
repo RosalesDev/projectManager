@@ -7,6 +7,7 @@ import com.st.project_manager.dto.StepDTO;
 import com.st.project_manager.service.StepService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +43,11 @@ public class StepController {
   @GetMapping("/by-task/{taskId}")
   public List<StepDTO> getAllStepByTaskId(@PathVariable Integer taskId) {
     return stepService.getAllStepByTaskId(taskId);
+  }
+
+  @GetMapping("/report/remaining-steps/{taskId}")
+  public Map<String, Object> countRemainingStepsByTaskId(@PathVariable Integer taskId) {
+    return stepService.countRemainingStepsByTaskId(taskId);
   }
 
   @DeleteMapping("/delete/{id}")

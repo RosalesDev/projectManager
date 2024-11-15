@@ -1,6 +1,8 @@
 package com.st.project_manager.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -88,6 +90,22 @@ public class StepServiceImpl implements StepService {
     stepRepository.deleteById(id);
 
     return ResponseEntity.ok("El paso con ID " + id + " fue eliminado con éxito.");
+  }
+
+  @Override
+  public Map<String, Object> countRemainingStepsByTaskId(Integer id) {
+    if (id == null || id < 0) {
+      throw new IllegalArgumentException("ID no válido.");
+    }
+    Integer countSteps = stepRepository.countRemainingStepsByTaskId(id).get();
+
+    Map<String, Object> response = new HashMap<>();
+
+    response.put("taskId", id);
+    response.put("countRemainingSteps", countSteps);
+
+    return response;
+
   }
 
 }

@@ -1,6 +1,7 @@
 package com.st.project_manager.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,12 @@ public interface TaskService {
   Optional<Integer> countTaskByPersonId(Integer id);
 
   List<TaskDTO> getTaskByProjectId(Integer id);
+
+  Optional<Integer> countPendingTaskByProjectId(Integer projectId);
+
+  Map<String, Object> findStartedByProjectId(Integer projectId);
+
+  Map<String, Object> findCompletedByProjectId(Integer projectId);
 
   List<TaskDTO> searchByTitleOrStatus(String title, String status);
 

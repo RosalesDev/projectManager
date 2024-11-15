@@ -8,6 +8,7 @@ import com.st.project_manager.dto.TaskDTO;
 import com.st.project_manager.service.TaskService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,9 +49,24 @@ public class TaskController {
     return taskService.getTaskByPersonId(id);
   }
 
-  @GetMapping("/report/count-task-by-user/{id}")
+  @GetMapping("/report/count-by-user/{id}")
   public Optional<Integer> countAllTaskByUserPerson(@PathVariable Integer id) {
     return taskService.countTaskByPersonId(id);
+  }
+
+  @GetMapping("/report/count-pending/{projectId}")
+  public Optional<Integer> countPendingTaskByProjectId(@PathVariable Integer projectId) {
+    return taskService.countPendingTaskByProjectId(projectId);
+  }
+
+  @GetMapping("/report/started/{projectId}")
+  public Map<String, Object> gettStartedTaskByProjectId(@PathVariable Integer projectId) {
+    return taskService.findStartedByProjectId(projectId);
+  }
+
+  @GetMapping("/report/completed/{projectId}")
+  public Map<String, Object> getCompletedTaskByProjectId(@PathVariable Integer projectId) {
+    return taskService.findCompletedByProjectId(projectId);
   }
 
   @GetMapping("/search/by-title-status")

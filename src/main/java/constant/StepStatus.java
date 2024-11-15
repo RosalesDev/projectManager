@@ -1,5 +1,5 @@
 package constant;
 
 public enum StepStatus {
-	PENDING, STARTED, FINALIZED, DEACTIVE
+	PENDING, STARTED, COMPLETED, DEACTIVE
 }
