@@ -90,17 +90,8 @@ public class ProjectHasUserPersonServiceImpl implements ProjectHasUserPersonServ
   }
 
   @Override
-  public Boolean userIsInProject(Integer personId, Integer projectId) {
-
-    if (personId == null || personId < 0 || projectId == null || projectId < 0) {
-      throw new IllegalArgumentException("El ID no es válido.");
-    }
-    List<ProjectDTO> projects = getAllProjectByPersonId(personId);
-    if (projects.isEmpty() || !projects.stream().anyMatch(project -> project.getId() == projectId)) {
-      return false;
-    }
-
-    return true;
+  public Boolean isUserAssignedToProject(Integer userId, Integer projectId) {
+    return repository.existsByUserPersonIdAndProjectId(userId, projectId);
   }
 
 }

@@ -15,6 +15,6 @@ public interface StepRepository extends JpaRepository<Step, Integer> {
 
   List<Step> findAllByTaskId(Integer taskId);
 
-  @Query("SELECT COUNT(s) FROM Step s WHERE s.status NOT IN ('COMPLETED','DEACTIVE')")
+  @Query("SELECT COUNT(s) FROM Step s WHERE s.task.id = :taskId AND s.status NOT IN ('COMPLETED','DEACTIVE')")
   Optional<Integer> countRemainingStepsByTaskId(Integer taskId);
 }

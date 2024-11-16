@@ -50,12 +50,12 @@ public class TaskController {
   }
 
   @GetMapping("/report/count-by-user/{id}")
-  public Optional<Integer> countAllTaskByUserPerson(@PathVariable Integer id) {
+  public Map<String, Object> countAllTaskByUserPerson(@PathVariable Integer id) {
     return taskService.countTaskByPersonId(id);
   }
 
   @GetMapping("/report/count-pending/{projectId}")
-  public Optional<Integer> countPendingTaskByProjectId(@PathVariable Integer projectId) {
+  public Map<String, Object> countPendingTaskByProjectId(@PathVariable Integer projectId) {
     return taskService.countPendingTaskByProjectId(projectId);
   }
 

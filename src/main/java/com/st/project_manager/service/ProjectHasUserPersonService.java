@@ -19,7 +19,7 @@ public interface ProjectHasUserPersonService {
 
   Optional<ProjectHasUserPersonDTO> getProjectHasUserPersonByProjectId(Integer projectId);
 
-  Boolean userIsInProject(Integer personId, Integer projectId);
+  Boolean isUserAssignedToProject(Integer userId, Integer projectId);
 
   Optional<ProjectHasUserPersonDTO> updateProjectHasUserPerson(Integer id,
       ProjectHasUserPersonDTO ProjectHasUserPersonDTO);

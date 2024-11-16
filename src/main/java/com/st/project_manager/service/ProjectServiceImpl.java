@@ -70,9 +70,9 @@ public class ProjectServiceImpl implements ProjectService {
       throw new ResourceNotFoundException("No se encontró un proyecto con el ID: " + id);
     }
 
-    Boolean hasManager = projectOptional.get().getUserPerson() != null;
+    Boolean hasManager = projectOptional.get().getManager() != null;
     if (projectDTO.getManagerId() != null && hasManager) {
-      Integer currentManagerId = projectOptional.get().getUserPerson().getId();
+      Integer currentManagerId = projectOptional.get().getManager().getId();
       if (!projectDTO.getManagerId().equals(currentManagerId)) {
         throw new ProjectAlreadyHasManagerException("No es posible modificar el manager del proyecto.");
       }
@@ -131,9 +131,9 @@ public class ProjectServiceImpl implements ProjectService {
     if (projectId == null || projectId < 0 || managerId == null || managerId < 0) {
       throw new InvalidIdException();
     }
-    Optional<Project> project = projectRepository.findById(projectId);
+    ProjectDTO projectDto = projectMapper.toDTO(projectRepository.findById(projectId).get());
 
-    if (project.isEmpty()) {
+    if (projectDto == null) {
       throw new ResourceNotFoundException("No existe el proyecto con ID:" + projectId);
     }
 
@@ -143,17 +143,18 @@ public class ProjectServiceImpl implements ProjectService {
       throw new ResourceNotFoundException("El usuario con ID: " + managerId + " no existe");
     }
     // FALTA VALIDAR QUE EL USUARIO TENGA PERMISOS PARA CAMBIAR DE MANAGER
-    if (project.get().getUserPerson() != null && project.get().getUserPerson().getId() != managerId) {
+    if (projectDto.getManagerId() != null && projectDto.getManagerId() != managerId) {
       throw new IllegalArgumentException("Solo el manager puede realizar esta acción.");
     }
-    Project updatedProject = project.get();
-    UserPerson newManager = userPerson.get();
+    // Project updatedProject = project.get();
+    // UserPerson newManager = userPerson.get();
 
-    updatedProject.setUserPerson(newManager);
+    projectDto.setManagerId(managerId);
+    Project updatedProject = projectMapper.toEntity(projectDto);
+
+    // updatedProject.setUserPerson(newManager);
 
     Project savedProject = projectRepository.save(updatedProject);
-
-    System.out.println(savedProject.toString());
 
     return Optional.of(projectMapper.toDTO(savedProject));
 

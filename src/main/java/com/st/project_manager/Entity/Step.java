@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 
 @Entity
 public class Step extends Audit {
@@ -34,6 +35,13 @@ public class Step extends Audit {
 
 	@Enumerated(EnumType.STRING)
 	private StepStatus status;
+
+	@PrePersist
+	public void prePersist() {
+		if (status == null) {
+			status = StepStatus.PENDING;
+		}
+	}
 
 	public Integer getId() {
 		return id;

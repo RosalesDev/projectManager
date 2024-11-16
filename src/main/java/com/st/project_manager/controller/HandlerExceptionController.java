@@ -53,4 +53,5 @@ public class HandlerExceptionController {
   public ResponseEntity<String> handleTaskWithoutStepsCompletedException(TaskWithoutStepsCompletedException ex) {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
   }
+
 }

@@ -42,9 +42,6 @@ public class StepServiceImpl implements StepService {
 
     List<Step> steps = stepRepository.findAllByTaskId(taskId);
 
-    if (steps.isEmpty()) {
-      throw new ResourceNotFoundException("No se encontraron pasos para la tarea con ID: " + taskId);
-    }
     return steps.stream()
         .map(stepMapper::toDTO)
         .toList();

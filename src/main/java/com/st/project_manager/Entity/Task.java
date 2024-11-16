@@ -6,7 +6,6 @@ import java.util.List;
 import com.st.project_manager.audit.Audit;
 
 import constant.TaskStatus;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,13 +27,13 @@ public class Task extends Audit {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(name = "start_date", updatable = false, nullable = false)
+	@Column(name = "start_date")
 	private LocalDateTime startDate;
 
-	@Column(name = "end_date", nullable = false)
+	@Column(name = "end_date")
 	private LocalDateTime endDate;
 
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	private String title;
 
 	private String description;
@@ -47,10 +46,10 @@ public class Task extends Audit {
 	@NotNull
 	private Project project;
 
-	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "task")
 	private List<Step> steps;
 
-	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "task")
 	private List<Comment> comments;
 
 	@ManyToOne(fetch = FetchType.LAZY)

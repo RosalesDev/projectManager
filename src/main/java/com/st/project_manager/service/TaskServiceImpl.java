@@ -1,5 +1,6 @@
 package com.st.project_manager.service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,10 +54,12 @@ public class TaskServiceImpl implements TaskService {
   public Optional<TaskDTO> createTask(TaskDTO taskDTO) {
 
     if (taskDTO.getUserPersonId() != null) {
-      if (!phupService.userIsInProject(taskDTO.getUserPersonId(), taskDTO.getProjectId())) {
+      if (!phupService.isUserAssignedToProject(taskDTO.getUserPersonId(), taskDTO.getProjectId())) {
         throw new UserNotInProjectException();
       }
     }
+    taskDTO.setStartDate(null);
+    taskDTO.setEndDate(null);
     Task task = taskRepository.save(modelMapper.map(taskDTO, Task.class));
     System.out.println(task.toString());
 
@@ -102,36 +105,38 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  public Optional<TaskDTO> updateTask(Integer id, TaskDTO taskDTO) throws RuntimeException {
+  public Optional<TaskDTO> updateTask(Integer id, TaskDTO taskDTO) {
     if (id == null || id < 0) {
       throw new InvalidIdException();
     }
 
-    Optional<Task> task = taskRepository.findById(id);
+    Optional<Task> taskOpt = taskRepository.findById(id);
 
-    if (task.isEmpty()) {
+    TaskDTO updatedTask = modelMapper.map(taskOpt.get(), TaskDTO.class);
+
+    if (taskOpt.isEmpty()) {
       throw new ResourceNotFoundException("La tarea con ID: " + id + " no existe.");
     }
 
-    Task updatedTask = task.get();
-
-    if (taskDTO.getStatus() != null && taskDTO.getStatus().equals(TaskStatus.COMPLETED.toString())) {
-      List<StepDTO> stepsDto = stepService.getAllStepByTaskId(id);
-      if (stepsDto.isEmpty() || stepsDto.stream().allMatch(step -> step.getStatus().equals(StepStatus.COMPLETED))) {
-        updatedTask.setStatus(TaskStatus.COMPLETED);
-      }
-      throw new TaskWithoutStepsCompletedException();
-    }
-
     if (taskDTO.getUserPersonId() != null) {
-      Optional<UserPersonDTO> userPersonOpt = userPersonService.getUserPersonById(taskDTO.getUserPersonId());
-      if (userPersonOpt.isEmpty()) {
-        throw new ResourceNotFoundException("El usuario con ID: " + taskDTO.getUserPersonId() + "no existe.");
+      if (!phupService.isUserAssignedToProject(taskDTO.getUserPersonId(), updatedTask.getProjectId())) {
+        throw new UserNotInProjectException();
       }
-      updatedTask.setUserPerson(modelMapper.map(userPersonOpt.get(), UserPerson.class));
+      updatedTask.setUserPersonId(taskDTO.getUserPersonId());
     }
-    if (taskDTO.getEndDate() != null) {
-      updatedTask.setEndDate(taskDTO.getEndDate());
+
+    if (taskDTO.getStatus() != null) {
+      switch (taskDTO.getStatus()) {
+        case "STARTED":
+          updatedTask.setStatus(TaskStatus.STARTED.toString());
+          updatedTask.setStartDate(LocalDateTime.now());
+          break;
+        case "COMPLETED":
+          this.completeTask(updatedTask, id);
+          break;
+        default:
+          break;
+      }
     }
 
     if (taskDTO.getTitle() != null) {
@@ -147,10 +152,26 @@ public class TaskServiceImpl implements TaskService {
       if (project.isEmpty()) {
         throw new ResourceNotFoundException("No se encuentra el proyecto con ID:" + taskDTO.getProjectId());
       }
-      updatedTask.setProject(modelMapper.map(project.get(), Project.class));
+      updatedTask.setProjectId(taskDTO.getProjectId());
+      ;
     }
 
-    return Optional.of(modelMapper.map(taskRepository.save(updatedTask), TaskDTO.class));
+    Task updatedTaskEntity = modelMapper.map(updatedTask, Task.class);
+
+    return Optional.of(modelMapper.map(taskRepository.save(updatedTaskEntity), TaskDTO.class));
+  }
+
+  private void completeTask(TaskDTO updatedTask, Integer id) {
+
+    List<StepDTO> stepsDto = stepService.getAllStepByTaskId(id);
+    Boolean allStepCompleted = stepsDto.stream().allMatch(step -> step.getStatus().equals(StepStatus.COMPLETED));
+
+    if (stepsDto == null || stepsDto.isEmpty() || allStepCompleted) {
+      updatedTask.setStatus(TaskStatus.COMPLETED.toString());
+      updatedTask.setEndDate(LocalDateTime.now());
+    } else {
+      throw new TaskWithoutStepsCompletedException();
+    }
   }
 
   @Override
@@ -188,7 +209,7 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  public Optional<Integer> countTaskByPersonId(Integer id) {
+  public Map<String, Object> countTaskByPersonId(Integer id) {
     if (id == null || id < 0) {
       throw new InvalidIdException();
     }
@@ -198,7 +219,13 @@ public class TaskServiceImpl implements TaskService {
       throw new ResourceNotFoundException("El usuario con ID: " + id + " no existe.");
     }
 
-    return taskRepository.countAllByPersonId(id);
+    Integer countAssignedTask = taskRepository.countAllByPersonId(id).get();
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("UserPersonId", id);
+    response.put("countAssignedTask", countAssignedTask);
+
+    return response;
   }
 
   @Override
@@ -217,11 +244,16 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  public Optional<Integer> countPendingTaskByProjectId(Integer projectId) {
+  public Map<String, Object> countPendingTaskByProjectId(Integer projectId) {
     if (projectId == null || projectId < 0) {
       throw new InvalidIdException();
     }
-    return taskRepository.countAllPendingByProjectId(projectId);
+    Integer countPendingTask = taskRepository.countAllPendingByProjectId(projectId).get();
+    Map<String, Object> response = new HashMap<>();
+    response.put("projectId", projectId.toString());
+    response.put("countPendingTask", countPendingTask);
+
+    return response;
   }
 
   @Override

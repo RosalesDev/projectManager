@@ -34,18 +34,23 @@ public class ProjectController {
   }
 
   @PutMapping("/update/{id}")
-  public Optional<ProjectDTO> putMethodName(@PathVariable Integer id, @RequestBody ProjectDTO projectDto) {
+  public Optional<ProjectDTO> updateProject(@PathVariable Integer id, @RequestBody ProjectDTO projectDto) {
     return projectService.updateProject(id, projectDto);
   }
 
   @PutMapping("/set-project-manager")
-  public Optional<ProjectDTO> putMethodName(@RequestParam Integer projectId, @RequestParam Integer managerId) {
+  public Optional<ProjectDTO> updateProjectManagerId(@RequestParam Integer projectId, @RequestParam Integer managerId) {
     return projectService.updateProjectManagerId(projectId, managerId);
   }
 
   @GetMapping("/allProjects")
   public List<ProjectDTO> getAllProjects() {
     return projectService.getAllProject();
+  }
+
+  @GetMapping("/by-id/{id}")
+  public Optional<ProjectDTO> getProjectById(@PathVariable Integer id) {
+    return projectService.getProjectById(id);
   }
 
   @GetMapping("/by-manager/{id}")

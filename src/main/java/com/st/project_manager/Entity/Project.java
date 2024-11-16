@@ -10,6 +10,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,11 +32,11 @@ public class Project extends Audit {
 	@Column(columnDefinition = "VARCHAR(50) DEFAULT 'PLANNING'")
 	private ProjectStatus status;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "manager_id")
 	private UserPerson manager;
 
-	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Task> task;
 
 	@PrePersist
@@ -77,12 +78,19 @@ public class Project extends Audit {
 		this.status = status;
 	}
 
-	public UserPerson getUserPerson() {
+	// public UserPerson getUserPerson() {
+	// return manager;
+	// }
+
+	// public void setUserPerson(UserPerson userPerson) {
+	// this.manager = userPerson;
+	// }
+	public UserPerson getManager() {
 		return manager;
 	}
 
-	public void setUserPerson(UserPerson userPerson) {
-		this.manager = userPerson;
+	public void setManager(UserPerson manager) {
+		this.manager = manager;
 	}
 
 	public Set<Task> getTask() {

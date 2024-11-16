@@ -20,7 +20,7 @@ public class ProjectMapper {
 
   private void configureMappings() {
     modelMapper.typeMap(Project.class, ProjectDTO.class)
-        .addMappings(mapper -> mapper.map(src -> src.getUserPerson().getId(), ProjectDTO::setManagerId));
+        .addMappings(mapper -> mapper.map(src -> src.getManager().getId(), ProjectDTO::setManagerId));
   }
 
   public ProjectDTO toDTO(Project project) {

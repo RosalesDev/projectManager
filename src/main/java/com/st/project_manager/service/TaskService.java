@@ -18,11 +18,11 @@ public interface TaskService {
 
   List<TaskDTO> getTaskByPersonId(Integer id);
 
-  Optional<Integer> countTaskByPersonId(Integer id);
+  Map<String, Object> countTaskByPersonId(Integer id);
 
   List<TaskDTO> getTaskByProjectId(Integer id);
 
-  Optional<Integer> countPendingTaskByProjectId(Integer projectId);
+  Map<String, Object> countPendingTaskByProjectId(Integer projectId);
 
   Map<String, Object> findStartedByProjectId(Integer projectId);
 

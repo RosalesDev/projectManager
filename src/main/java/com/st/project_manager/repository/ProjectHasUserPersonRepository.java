@@ -23,4 +23,6 @@ public interface ProjectHasUserPersonRepository extends JpaRepository<ProjectHas
   @Query("SELECT phup.project FROM ProjectHasUserPerson phup WHERE phup.project.id = :projectId")
   Optional<ProjectHasUserPerson> findByProjectId(Integer projectId);
 
+  Boolean existsByUserPersonIdAndProjectId(Integer userId, Integer projectId);
+
 }

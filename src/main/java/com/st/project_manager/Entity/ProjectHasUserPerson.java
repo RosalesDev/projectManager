@@ -19,11 +19,11 @@ public class ProjectHasUserPerson extends Audit {
 	private Integer id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_person_id")
+	@JoinColumn(name = "user_person_id", nullable = false)
 	private UserPerson userPerson;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "project_id")
+	@JoinColumn(name = "project_id", nullable = false)
 	private Project project;
 
 	@Column(columnDefinition = "BIT DEFAULT 1")
