@@ -21,7 +21,7 @@ public class UserPersonHasRole extends Audit {
   @JoinColumn(name = "user_person_id", nullable = false)
   private UserPerson userPerson;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "role_id", nullable = false)
   private Role role;
 

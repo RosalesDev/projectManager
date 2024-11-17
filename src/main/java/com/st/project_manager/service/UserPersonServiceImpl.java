@@ -60,17 +60,17 @@ public class UserPersonServiceImpl implements UserPersonService {
 			userPersonToUpdateDTO.setEmail(userPerson.getEmail());
 		}
 
-		if (userPerson.getFirstName() != null && !userPerson.getFirstName().isBlank()) {
-			userPersonToUpdateDTO.setFirstName(userPerson.getFirstName());
+		if (userPerson.getFirstname() != null && !userPerson.getFirstname().isBlank()) {
+			userPersonToUpdateDTO.setFirstname(userPerson.getFirstname());
 
 		}
 
-		if (userPerson.getLastName() != null && !userPerson.getLastName().isBlank()) {
-			userPersonToUpdateDTO.setLastName(userPerson.getLastName());
+		if (userPerson.getLastname() != null && !userPerson.getLastname().isBlank()) {
+			userPersonToUpdateDTO.setLastname(userPerson.getLastname());
 		}
 
-		if (userPerson.getUserName() != null && !userPerson.getUserName().isBlank()) {
-			userPersonToUpdateDTO.setUserName(userPerson.getUserName());
+		if (userPerson.getUsername() != null && !userPerson.getUsername().isBlank()) {
+			userPersonToUpdateDTO.setUsername(userPerson.getUsername());
 		}
 
 		UserPerson userPersonUdated = modelMapper.map(userPersonToUpdateDTO, UserPerson.class);
