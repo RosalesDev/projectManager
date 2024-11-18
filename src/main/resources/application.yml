@@ -6,12 +6,8 @@ spring:
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.SQLServerDialect
     show-sql: true
-  security:
-    user:
-      name: admin
-      password: Test1234
