@@ -142,17 +142,13 @@ public class ProjectServiceImpl implements ProjectService {
     if (userPerson.isEmpty()) {
       throw new ResourceNotFoundException("El usuario con ID: " + managerId + " no existe");
     }
-    // FALTA VALIDAR QUE EL USUARIO TENGA PERMISOS PARA CAMBIAR DE MANAGER
+    // ToDo: FALTA VALIDAR QUE EL USUARIO TENGA PERMISOS PARA CAMBIAR DE MANAGER
     if (projectDto.getManagerId() != null && projectDto.getManagerId() != managerId) {
       throw new IllegalArgumentException("Solo el manager puede realizar esta acción.");
     }
-    // Project updatedProject = project.get();
-    // UserPerson newManager = userPerson.get();
 
     projectDto.setManagerId(managerId);
     Project updatedProject = projectMapper.toEntity(projectDto);
-
-    // updatedProject.setUserPerson(newManager);
 
     Project savedProject = projectRepository.save(updatedProject);
 

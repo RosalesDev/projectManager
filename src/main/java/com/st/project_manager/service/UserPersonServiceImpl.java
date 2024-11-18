@@ -8,6 +8,7 @@ import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.st.project_manager.auth.AuthResponse;
 import com.st.project_manager.dto.UserPersonDTO;
 import com.st.project_manager.entity.UserPerson;
 import com.st.project_manager.repository.UserPersonRepository;
@@ -19,19 +20,19 @@ public class UserPersonServiceImpl implements UserPersonService {
 
 	private final UserPersonRepository userPersonRepository;
 	private final ModelMapper modelMapper;
+	private final AuthService authService;
 
-	public UserPersonServiceImpl(UserPersonRepository userPersonRepository, ModelMapper modelMapper) {
+	public UserPersonServiceImpl(UserPersonRepository userPersonRepository, ModelMapper modelMapper,
+			AuthService authService) {
 		this.userPersonRepository = userPersonRepository;
 		this.modelMapper = modelMapper;
+		this.authService = authService;
 	}
 
 	@Transactional
 	@Override
-	public UserPersonDTO createUserPerson(UserPersonDTO userPerson) {
-		UserPerson userPersonToSave = modelMapper.map(userPerson, UserPerson.class);
-		UserPersonDTO userPersonCreated = modelMapper.map(userPersonRepository.save(userPersonToSave),
-				UserPersonDTO.class);
-		return userPersonCreated;
+	public AuthResponse createUserPerson(UserPersonDTO userPerson) {
+		return authService.register(userPerson);
 	}
 
 	@Transactional(readOnly = true)
@@ -60,17 +61,17 @@ public class UserPersonServiceImpl implements UserPersonService {
 			userPersonToUpdateDTO.setEmail(userPerson.getEmail());
 		}
 
-		if (userPerson.getFirstname() != null && !userPerson.getFirstname().isBlank()) {
-			userPersonToUpdateDTO.setFirstname(userPerson.getFirstname());
+		if (userPerson.getFirstName() != null && !userPerson.getFirstName().isBlank()) {
+			userPersonToUpdateDTO.setFirstName(userPerson.getFirstName());
 
 		}
 
-		if (userPerson.getLastname() != null && !userPerson.getLastname().isBlank()) {
-			userPersonToUpdateDTO.setLastname(userPerson.getLastname());
+		if (userPerson.getLastName() != null && !userPerson.getLastName().isBlank()) {
+			userPersonToUpdateDTO.setLastName(userPerson.getLastName());
 		}
 
-		if (userPerson.getUsername() != null && !userPerson.getUsername().isBlank()) {
-			userPersonToUpdateDTO.setUsername(userPerson.getUsername());
+		if (userPerson.getUserName() != null && !userPerson.getUserName().isBlank()) {
+			userPersonToUpdateDTO.setUserName(userPerson.getUserName());
 		}
 
 		UserPerson userPersonUdated = modelMapper.map(userPersonToUpdateDTO, UserPerson.class);

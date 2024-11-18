@@ -9,5 +9,5 @@ import com.st.project_manager.entity.UserPerson;
 
 @Repository
 public interface UserPersonRepository extends JpaRepository<UserPerson, Integer> {
-  Optional<UserPerson> findByUserName(String userName);
+  Optional<UserPerson> findByUsername(String userName);
 }

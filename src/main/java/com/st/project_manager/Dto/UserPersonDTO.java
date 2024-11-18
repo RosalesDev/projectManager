@@ -6,9 +6,9 @@ public class UserPersonDTO extends AuditDTO {
 
 	private Integer id;
 
-	private String username;
-	private String firstname;
-	private String lastname;
+	private String userName;
+	private String firstName;
+	private String lastName;
 	private String email;
 	private String password;
 	private UserStatus status = UserStatus.ACTIVE;
@@ -21,28 +21,28 @@ public class UserPersonDTO extends AuditDTO {
 		this.id = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUsername(String userName) {
-		this.username = userName;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
-	public String getFirstname() {
-		return firstname;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setFirstname(String firstName) {
-		this.firstname = firstName;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public String getLastname() {
-		return lastname;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLastname(String lastName) {
-		this.lastname = lastName;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getEmail() {

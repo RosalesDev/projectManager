@@ -7,7 +7,7 @@ public class AuditListener {
 
     @PrePersist
     public void setCreatedBy(Audit auditEntity) {
-    	auditEntity.setCreatedBy(getAuthenticatedUser());
+        auditEntity.setCreatedBy(getAuthenticatedUser());
     }
 
     @PreUpdate
@@ -16,7 +16,6 @@ public class AuditListener {
     }
 
     private Long getAuthenticatedUser() {
-        return (long) 123;  // Valor de ejemplo
+        return (long) 123; // Falta hacer que se coloque el id del usuario logueado.
     }
 }
-

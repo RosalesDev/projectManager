@@ -23,11 +23,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class StepController {
 
   private final StepService stepService;
-  // private final ModelMapper modelMapper;
 
   public StepController(StepService stepService) {
     this.stepService = stepService;
-    // this.modelMapper = modelMapper;
   }
 
   @PostMapping("/create-step")

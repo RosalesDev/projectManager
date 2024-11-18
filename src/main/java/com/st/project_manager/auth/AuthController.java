@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.st.project_manager.dto.UserPersonDTO;
 import com.st.project_manager.service.AuthService;
 
 @RestController
@@ -24,7 +25,7 @@ public class AuthController {
   }
 
   @PostMapping("register")
-  public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+  public ResponseEntity<AuthResponse> register(@RequestBody UserPersonDTO request) {
     return ResponseEntity.ok(authService.register(request));
   }
 

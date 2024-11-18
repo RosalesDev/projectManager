@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.st.project_manager.auth.AuthResponse;
 import com.st.project_manager.auth.LoginRequest;
-import com.st.project_manager.auth.RegisterRequest;
+import com.st.project_manager.dto.UserPersonDTO;
 import com.st.project_manager.entity.Role;
 import com.st.project_manager.entity.UserPerson;
 import com.st.project_manager.entity.UserPersonHasRole;
@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public AuthResponse login(LoginRequest req) {
     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
-    UserDetails user = userPersonRepository.findByUserName(req.getUsername()).orElseThrow();
+    UserDetails user = userPersonRepository.findByUsername(req.getUsername()).orElseThrow();
     String token = jwtService.getToken(user);
     AuthResponse response = new AuthResponse();
     response.setToken(token);
@@ -43,9 +43,9 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
-  public AuthResponse register(RegisterRequest req) {
+  public AuthResponse register(UserPersonDTO req) {
     Role defaultRole = new Role();
-    defaultRole.setCode("USER");
+    defaultRole.setCode("ROLE_USER");
     defaultRole.setName("USER");
 
     UserPersonHasRole userPersonHasRole = new UserPersonHasRole();
@@ -54,10 +54,11 @@ public class AuthServiceImpl implements AuthService {
     AuthResponse response = new AuthResponse();
 
     UserPerson newUser = new UserPerson();
-    newUser.setUserName(req.getUsername());
+    newUser.setUsername(req.getUserName());
     newUser.setPassword(passwordEncoder.encode(req.getPassword()));
-    newUser.setFirstName(req.getFirstName());
-    newUser.setLastName(req.getLastName());
+    newUser.setFirstname(req.getFirstName());
+    newUser.setLastname(req.getLastName());
+    newUser.setEmail(req.getEmail());
     newUser.setRole(List.of(userPersonHasRole));
 
     userPersonRepository.save(newUser);

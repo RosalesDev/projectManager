@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.st.project_manager.auth.AuthResponse;
 import com.st.project_manager.dto.UserPersonDTO;
 import com.st.project_manager.service.UserPersonService;
 
@@ -27,9 +29,10 @@ public class UserPersonController {
 	}
 
 	@PostMapping(value = { "/createUser" }, produces = { "application/json" })
-	public ResponseEntity<UserPersonDTO> createUserPerson(@RequestBody UserPersonDTO userPersonDTO) {
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<AuthResponse> createUserPerson(@RequestBody UserPersonDTO userPersonDTO) {
 
-		UserPersonDTO createdUserPersonDTO = userPersonService.createUserPerson(userPersonDTO);
+		AuthResponse createdUserPersonDTO = userPersonService.createUserPerson(userPersonDTO);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdUserPersonDTO);
 	}

@@ -78,13 +78,6 @@ public class Project extends Audit {
 		this.status = status;
 	}
 
-	// public UserPerson getUserPerson() {
-	// return manager;
-	// }
-
-	// public void setUserPerson(UserPerson userPerson) {
-	// this.manager = userPerson;
-	// }
 	public UserPerson getManager() {
 		return manager;
 	}

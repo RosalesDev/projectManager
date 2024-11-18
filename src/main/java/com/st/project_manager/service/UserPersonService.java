@@ -3,11 +3,12 @@ package com.st.project_manager.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.st.project_manager.auth.AuthResponse;
 import com.st.project_manager.dto.UserPersonDTO;
 
 public interface UserPersonService {
 
-    UserPersonDTO createUserPerson(UserPersonDTO userPerson);
+    AuthResponse createUserPerson(UserPersonDTO userPerson);
 
     List<UserPersonDTO> getAllUserPerson();
 
